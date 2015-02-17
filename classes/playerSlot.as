@@ -39,7 +39,7 @@
 				dispatchEvent(new Event("splashCargado"));
 			});
 			goLk.addEventListener(MouseEvent.CLICK,function(lk:MouseEvent):void{
-				navigateToURL(new URLRequest("http://www.lolking.net/summoner/"+Main.Ssummoner.realm+"/"+player.summonerId+"#matches"));
+				navigateToURL(new URLRequest("http://www.lolking.net/summoner/"+Main.Ssummoner.realm+"/"+player.summonerId+"#ranked-stats"));
 			});
 		}
 	}

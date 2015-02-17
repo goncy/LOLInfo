@@ -20,7 +20,7 @@
 		private var api:String = "79cec077-7792-4ac8-90cc-a43d5cff69a6";
 		private var lolApiRequest:LOLInfoApi = new LOLInfoApi(api);
 		private var matchContainer:MovieClip = new MovieClip();
-		private var userInfo:Object = {summonerName: "sannt1", realm:"las"};
+		private var userInfo:Object = {summonerName: "goncyrlz", realm:"las"};
 		private var playersLoaded:int = 0;
 		public static var Ssummoner:Object = new Object();
 		private var appInfo:Object = new Object();
@@ -263,8 +263,6 @@
 }
 
 /*
-MOSTRAR ERRORES EN VENTANA
-MOSTRAR INFORMACION EN VENTANA
 ARMAR VENTANA DE CONFIGURACION
 MASTERIES Y RUNAS
 ESPECTADOR
