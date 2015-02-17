@@ -1,26 +1,8 @@
 {
-	"informacion":[
-		{
-			"Titulo": "Hola Mundo",
-			"Texto": "Aca estoy mundo",
-			"id": "Este es mi mundo"
-		},
+	"informacion":
 		{
 			"Titulo": "Hola Mundo",
 			"Texto": "Aca estoy mundo",
 			"id": "Este es mi mundo"
 		}
-	],
-	"errores":[
-		{
-			"Titulo": "Hola Mundo",
-			"Texto": "Aca estoy mundo",
-			"id": "Este es mi mundo"
-		},
-		{
-			"Titulo": "Hola Mundo",
-			"Texto": "Aca estoy mundo",
-			"id": "Este es mi mundo"
-		}
-	]
 }
