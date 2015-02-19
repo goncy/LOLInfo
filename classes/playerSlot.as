@@ -6,13 +6,16 @@
 	import com.greensock.TweenMax;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import com.hybrid.ui.ToolTip;
+	import flash.text.TextFormat;
+	import flash.display.DisplayObject;
 	
 	public class playerSlot extends MovieClip {
 		
 		private var redirecter;
 		
 		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object) {
-			// constructor code
+			setTooltip();
 			redirecter = new redirectBox(champArray[player.championId],player,realm);
 			division.gotoAndStop(player.tier);
 			tierLogo.gotoAndStop(player.tier);
@@ -28,6 +31,7 @@
 			playerGs.text = player.gScore+" GS";
 			wins.text = "W: "+player.wins;
 			losses.text = "L: "+player.losses;
+			
 			//Icon
 			profileIcon.source = "http://ddragon.leagueoflegends.com/cdn/"+version+"/img/profileicon/"+player.profileIconId+".png";
 			profileIcon.addEventListener(Event.COMPLETE, function(e:Event){
@@ -36,6 +40,7 @@
 				TweenMax.to(e.target,1,{autoAlpha:1});
 				e.target.visible = true;
 			});
+			
 			//Champ
 			champ.source = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"+champArray[player.championId].key+"_0.jpg";
 			champ.addEventListener(Event.COMPLETE, function(ev:Event){
@@ -45,12 +50,18 @@
 				ev.target.visible = true;
 				dispatchEvent(new Event("splashCargado"));
 			});
+			
 			goLk.addEventListener(MouseEvent.CLICK,function(lk:MouseEvent):void{
 				redirecter.cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 					parent.parent.removeChild(redirecter);
 				});
 				parent.parent.addChild(redirecter);
 			});
+		}
+		
+		private function setTooltip():void
+		{
+
 		}
 	}
 }
