@@ -6,9 +6,6 @@
 	import com.greensock.TweenMax;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import com.hybrid.ui.ToolTip;
-	import flash.text.TextFormat;
-	import flash.display.DisplayObject;
 	
 	public class playerSlot extends MovieClip {
 		

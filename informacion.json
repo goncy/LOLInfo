@@ -7,15 +7,28 @@
     "badges": {
     	"96893":{
     		"badgeName": "Goncy",
-    		"razon": "Creador"
+    		"razon": "CREADOR!",
+    		"nombre": "Goncy"
     	},
     	"195958":{
     		"badgeName": "Colaborador",
-    		"razon": "Primo"
+    		"razon": "AYUDANTE",
+    		"nombre": "Primo Franco"
     	},
     	"378400":{
     		"badgeName": "Yani",
-    		"razon": "Yani"
+    		"razon": "NOVIA <3",
+    		"nombre": "Yani"
+    	},
+    	"29354":{
+    		"badgeName": "Conocido",
+    		"razon": "CONOCIDO",
+    		"nombre": "Santi"
+    	},
+    	"50845":{
+    		"badgeName": "Veterano",
+    		"razon": "VETERANO",
+    		"nombre": "Mati"
     	}
     }
 }
