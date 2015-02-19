@@ -184,7 +184,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamA.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamA.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -201,7 +201,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamB.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamB.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -245,7 +245,7 @@
 		private function createAlert(e:MouseEvent):void
 		{
 			alertBtn.visible = false;
-			var _alert:Alert = new Alert(appInfo);
+			var _alert:Alert = new Alert(appInfo.informacion);
 			_alert.addEventListener("alertOculto", function(e:Event):void{
 				removeChild(_alert);
 			});

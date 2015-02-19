@@ -11,13 +11,14 @@
 		
 		private var redirecter;
 		
-		public function playerSlot(player:Object,version:String,champArray:Object,realm:String) {
+		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object) {
 			// constructor code
 			redirecter = new redirectBox(champArray[player.championId],player,realm);
 			division.gotoAndStop(player.tier);
 			tierLogo.gotoAndStop(player.tier);
 			spell1.gotoAndStop(String(player.spell1));
 			spell2.gotoAndStop(String(player.spell2));
+			if(badges[player.summonerId]) badge.gotoAndStop(badge.badgeName);
 			summonerName.text = player.summonerName;
 			div.text = player.division;
 			playerGs.text = player.gScore+" GS";

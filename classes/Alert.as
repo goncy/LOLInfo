@@ -13,8 +13,8 @@
 		public function Alert(info:Object) {
 			// constructor code
 			alerta.alpha = 0;
-			title.text = info.informacion.Titulo;
-			body.htmlText = info.informacion.Texto;
+			title.text = info.Titulo;
+			body.htmlText = info.Texto;
 			TweenMax.to(alerta, 0.5, {autoAlpha:1});
 			cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				TweenMax.to(alerta,0.5,{autoAlpha:0,onComplete:function(){dispatchEvent(new Event("alertOculto"))}});
