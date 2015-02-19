@@ -63,6 +63,8 @@
 		
 		private function setUserConfig():void
 		{
+			userContainer.searchUser.buttonMode = true;
+			
 			configPop.addEventListener("okPressed", function(e:Event):void{
 				userInfo.summonerName = configPop.user;
 				userInfo.realm = configPop.realm;
@@ -84,6 +86,14 @@
 			userContainer.configIcon.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				userContainer.visible = false;
 				configPop.visible = true;
+			});
+			
+			userContainer.searchUser.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void{
+				TweenMax.to(userContainer.searchUser,0.5,{autoAlpha:1});
+			});
+			
+			userContainer.searchUser.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void{
+				TweenMax.to(userContainer.searchUser,0.5,{autoAlpha:0.1});
 			});
 			
 			userContainer.searchUser.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
@@ -313,5 +323,6 @@
 
 /*
 PANTALLA DE INICIO
-BADGES
+SHARED OBJECTS
+SPECTEAR
 */
