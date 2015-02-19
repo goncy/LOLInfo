@@ -18,11 +18,11 @@
 -->
 <application xmlns="http://ns.adobe.com/air/application/13.0">
   <id>LOLInfo</id>
-  <versionNumber>1.0</versionNumber>
+  <versionNumber>2.0</versionNumber>
   <filename>LOLInfo</filename>
-  <description/>
+  <description>Informacion sobre partidas activas de League of Legends</description>
   <name>LOLInfo</name>
-  <copyright/>
+  <copyright>Gonzalo Pozzo</copyright>
   <initialWindow>
     <content>LOLInfo.swf</content>
     <systemChrome>standard</systemChrome>

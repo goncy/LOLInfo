@@ -9,9 +9,11 @@
 	
 	public class playerSlot extends MovieClip {
 		
+		private var redirecter;
 		
-		public function playerSlot(player:Object,version:String,champArray:Object) {
+		public function playerSlot(player:Object,version:String,champArray:Object,realm:String) {
 			// constructor code
+			redirecter = new redirectBox(champArray[player.championId],player,realm);
 			division.gotoAndStop(player.tier);
 			tierLogo.gotoAndStop(player.tier);
 			spell1.gotoAndStop(String(player.spell1));
@@ -39,7 +41,10 @@
 				dispatchEvent(new Event("splashCargado"));
 			});
 			goLk.addEventListener(MouseEvent.CLICK,function(lk:MouseEvent):void{
-				navigateToURL(new URLRequest("http://www.lolking.net/summoner/"+Main.Ssummoner.realm+"/"+player.summonerId+"#ranked-stats"));
+				redirecter.cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+					parent.parent.removeChild(redirecter);
+				});
+				parent.parent.addChild(redirecter);
 			});
 		}
 	}

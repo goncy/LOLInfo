@@ -3,12 +3,13 @@
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
+	import flash.events.FocusEvent;
 	import flash.ui.Mouse;
 	
 	
 	public class realmDrop extends MovieClip {
 		
-		private var realm:String;
+		public var realm:String;
 		
 		public function realmDrop() {
 			this.visible = false;
@@ -27,10 +28,10 @@
 				
 		private function setRealm(e:MouseEvent):void
 		{
-			Main.Ssummoner.realm = e.target.name;
 			realm = e.target.name;
 			this.visible = false;
-			dispatchEvent(new Event("realmCambiado"));
+			
+			dispatchEvent(new Event("searchRealmCambiado"));
 		}
 	}
 }

@@ -10,6 +10,9 @@
 	import classes.midBar;
 	import classes.realmDrop;
 	import classes.Alert;
+	import classes.configAlert;
+	import classes.bgChanger;
+	import classes.redirectBox;
 	
 	//Greensock
 	import com.greensock.TweenMax;
@@ -17,12 +20,16 @@
 	
 	public class Main extends MovieClip {
 		
+		//Match related
 		private var api:String = "79cec077-7792-4ac8-90cc-a43d5cff69a6";
 		private var lolApiRequest:LOLInfoApi = new LOLInfoApi(api);
-		private var matchContainer:MovieClip = new MovieClip();
-		private var userInfo:Object = {summonerName: "goncyrlz", realm:"las"};
 		private var playersLoaded:int = 0;
-		public static var Ssummoner:Object = new Object();
+		private var Ssummoner:Object = new Object();
+		//Containers
+		private var matchContainer:MovieClip = new MovieClip();
+		//User related
+		private var userInfo:Object = {};
+		//App related
 		private var appInfo:Object = new Object();
 		
 		public function Main() {
@@ -41,39 +48,51 @@
 			
 			lolApiRequest.addEventListener("champsCompleta", function(e:Event){
 				readyState();
-				if(userInfo.summonerName) populateUser();
-				else onlyConfig.visible = true;
+				userHandler();
 				_searchMatch.addEventListener(MouseEvent.CLICK, searchMatch);
 				lolApiRequest.addEventListener("matchCompleta", generateMatchStage);
 			});
         }
 		
-		private function stageOptions():void
+		private function userHandler():void
 		{
-			//Obtener noticias
-			var getAppInformation:infoSearch = new infoSearch(api);
-			getAppInformation.getAppInfo();
-			getAppInformation.addEventListener("appInfoCompleta", function(e:Event):void{
-				appInfo = getAppInformation.appInfo;
-				animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,true);
-				alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
-			});
-			//Seteos de Realm
-			realmSearch.addEventListener("realmCambiado", function(e:Event){
-				realmText.text = Ssummoner.realm.toUpperCase();
-			});
-			
-			openRealmSearch.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){
-				if(realmSearch.visible) realmSearch.visible = false;
-				else realmSearch.visible = true;
-				setChildIndex(realmSearch, numChildren - 1);
+			setUserConfig();
+			if(userInfo.summonerName) populateUser();
+			else onlyConfig.visible = true;
+		}
+		
+		private function setUserConfig():void
+		{
+			configPop.addEventListener("okPressed", function(e:Event):void{
+				userInfo.summonerName = configPop.user;
+				userInfo.realm = configPop.realm;
+				configPop.visible = false;
+				populateUser();
 			});
 			
-			//BG
-			bgImage.gotoAndStop("jinx");
+			configPop.addEventListener("cancelPressed", function(e:Event):void{
+				configPop.visible = false;
+				if(userInfo.summonerName) populateUser();
+				else onlyConfig.visible = true;
+			});
 			
-			//Placeholder de summoner, condicional carga de usuario, seteo de loading state
-			setPlaceHolder(summonerNameSearch, "Buscar invocador");
+			onlyConfig.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+				onlyConfig.visible = false;
+				configPop.visible = true;
+			});
+			
+			userContainer.configIcon.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+				userContainer.visible = false;
+				configPop.visible = true;
+			});
+			
+			userContainer.searchUser.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+				cleanStage();
+				loadingState();
+				Ssummoner.summonerName = userInfo.name;
+				Ssummoner.realm = userInfo.realm.toLowerCase();
+				lolApiRequest.search(Ssummoner.summonerName,Ssummoner.realm);
+			});
 		}
 		
 		private function populateUser():void
@@ -92,15 +111,45 @@
 				userContainer.profileIcon.addEventListener(Event.COMPLETE, function(eIcon:Event){
 					eIcon.target.content.smoothing = true;
 					loadUser.visible = false;
-					animateAlpha(userContainer,1,0,1,userContainer.x,userContainer.x,true);
+					animateAlpha(userContainer,1,0,1,userContainer.x,userContainer.x);
 				});
 			});
 			getInfo.addEventListener("userInfoError", function(e:Event){
 				trace("Error recuperando informacion del invocador");
 				loadUser.visible = false;
-				onlyConfig.visible = true;
 				userContainer.visible = false;
+				onlyConfig.visible = true;
 			});
+		}
+		
+		private function stageOptions():void
+		{
+			//Obtener noticias
+			var getAppInformation:infoSearch = new infoSearch(api);
+			getAppInformation.getAppInfo();
+			getAppInformation.addEventListener("appInfoCompleta", function(e:Event):void{
+				appInfo = getAppInformation.appInfo;
+				animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,function(){
+					alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
+				});
+			});
+			//Seteos de Realm
+			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
+				Ssummoner.realm = realmSearch.realm;
+				realmText.text = Ssummoner.realm.toUpperCase();
+			});
+			
+			openRealmSearch.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){
+				if(realmSearch.visible) realmSearch.visible = false;
+				else realmSearch.visible = true;
+				setChildIndex(realmSearch, numChildren - 1);
+			});
+			
+			//BG
+			bgImage.gotoAndStop("jinx");
+			
+			//Placeholder de summoner, condicional carga de usuario, seteo de loading state
+			setPlaceHolder(summonerNameSearch, "BUSCAR INVOCADOR");
 		}
 		
 		private function readyState():void
@@ -135,7 +184,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamA.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamA.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -152,7 +201,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamB.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamB.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -174,9 +223,9 @@
 		private function generateMatchInfo():void
 		{
 			var barraMedio:midBar = new midBar(lolApiRequest);
-			barraMedio.y = 197;
+			barraMedio.y = 198;
 			
-			animateAlpha(barraMedio,2,0,1,-90,-30,true);
+			animateAlpha(barraMedio,2,0,1,-90,-30);
 
 			matchContainer.addChild(barraMedio);
 		}
@@ -184,12 +233,23 @@
 		private function addToStage():void
 		{
 			matchContainer.y = 97;
-			animateAlpha(matchContainer,1,0,1,0,53,true);
+			animateAlpha(matchContainer,1,0,1,0,53);
 			
 			addChild(matchContainer);
+			setChildIndex(matchContainer,stage.numChildren+1);
 			
 			realmSearch.visible = false;
 			readyState();
+		}
+		
+		private function createAlert(e:MouseEvent):void
+		{
+			alertBtn.visible = false;
+			var _alert:Alert = new Alert(appInfo);
+			_alert.addEventListener("alertOculto", function(e:Event):void{
+				removeChild(_alert);
+			});
+			addChild(_alert);
 		}
 		
 		private function cleanStage():void
@@ -202,6 +262,23 @@
 			}
 			
 			matchContainer = new MovieClip();
+		}
+			
+		public static function setPlaceHolder(objeto:TextField, placeHolder:String):void
+		{
+			objeto.addEventListener( FocusEvent.FOCUS_IN,  function(e:FocusEvent){
+				e.target.text = "";
+			});
+			objeto.addEventListener( FocusEvent.FOCUS_OUT, function(e:FocusEvent){
+				if(e.target.text == "")e.target.text = placeHolder;
+			});
+		}
+		
+		private function animateAlpha(mc,duration:int,alphaInit:int,alphaAmmount:int,initX:int,xPos:int,completeFunction:Function = null):void
+		{
+			mc.alpha = alphaInit;
+			mc.x = initX;
+			TweenMax.to(mc,duration,{autoAlpha:alphaAmmount, x:xPos, onComplete:completeFunction});
 		}
 		
 		private function errorHandler(e:Event):void
@@ -231,41 +308,10 @@
 			}
 			readyState();
 		}
-		
-		private function setPlaceHolder(objeto:TextField, placeHolder:String):void
-		{
-			objeto.addEventListener( FocusEvent.FOCUS_IN,  function(e:FocusEvent){
-				e.target.text = "";
-			});
-			objeto.addEventListener( FocusEvent.FOCUS_OUT, function(e:FocusEvent){
-				if(e.target.text == "")e.target.text = placeHolder;
-			});
-		}
-		
-		private function createAlert(e:MouseEvent):void
-		{
-			e.target.visible = false;
-			var alerta:Alert = new Alert(appInfo);
-			addChild(alerta);
-			alerta.cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
-				TweenMax.to(alerta,0.5,{autoAlpha:0,onComplete:function(){removeChild(alerta)}});
-			});
-		}
-		
-		private function animateAlpha(mc,duration:int,alphaInit:int,alphaAmmount:int,initX:int,xPos:int,visibility:Boolean):void
-		{
-			mc.visible = visibility;
-			mc.alpha = alphaInit;
-			mc.x = initX;
-			TweenMax.to(mc,duration,{autoAlpha:alphaAmmount, x:xPos});
-		}
 	}
 }
 
 /*
-ARMAR VENTANA DE CONFIGURACION
-MASTERIES Y RUNAS
-ESPECTADOR
 PANTALLA DE INICIO
-~ MATCH HISTORY Y SUMMONER SEARCH
+BADGES
 */
