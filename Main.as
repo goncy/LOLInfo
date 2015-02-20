@@ -2,10 +2,14 @@
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import com.lolinfoapi.LOLInfoApi;
-	import com.lolinfoapi.infoSearch;
+	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
+	import flash.filesystem.FileMode;
 	import flash.events.MouseEvent;
 	import flash.events.FocusEvent;
+	import flash.desktop.NativeApplication;
+	import com.lolinfoapi.LOLInfoApi;
+	import com.lolinfoapi.infoSearch;
 	import classes.playerSlot;
 	import classes.midBar;
 	import classes.realmDrop;
@@ -21,7 +25,7 @@
 	public class Main extends MovieClip {
 		
 		//Match related
-		private var api:String = "79cec077-7792-4ac8-90cc-a43d5cff69a6";
+		private var api:String = "102651e0-be0a-4d8c-ab78-83ca5821efaa";
 		private var lolApiRequest:LOLInfoApi = new LOLInfoApi(api);
 		private var playersLoaded:int = 0;
 		private var Ssummoner:Object = new Object();
@@ -29,6 +33,7 @@
 		private var matchContainer:MovieClip = new MovieClip();
 		//User related
 		private var userInfo:Object = {};
+		private var userConfigs:Object = {};
 		//App related
 		private var appInfo:Object = new Object();
 		
@@ -38,17 +43,17 @@
         }
 
         private function init(e:Event = null):void 
-        {
+        {			
             removeEventListener(Event.ADDED_TO_STAGE, init);
-			stageOptions();
+			appConfigInit();
 			lolApiRequest.addEventListener("champsError", errorHandler);
 			lolApiRequest.addEventListener("summonerError", errorHandler);
 			lolApiRequest.addEventListener("matchError", errorHandler);
 			lolApiRequest.addEventListener("versionError", errorHandler);
 			
 			lolApiRequest.addEventListener("champsCompleta", function(e:Event){
-				readyState();
 				userHandler();
+				readyState();
 				_searchMatch.addEventListener(MouseEvent.CLICK, searchMatch);
 				lolApiRequest.addEventListener("matchCompleta", generateMatchStage);
 			});
@@ -63,13 +68,20 @@
 		
 		private function setUserConfig():void
 		{
+			userInfo.summonerName = userConfigs.summonerName;
+			userInfo.realm = userConfigs.realm;
+			
 			userContainer.searchUser.buttonMode = true;
 			
 			configPop.addEventListener("okPressed", function(e:Event):void{
 				userInfo.summonerName = configPop.user;
 				userInfo.realm = configPop.realm;
+				userConfigs.summonerName = configPop.user;
+				userConfigs.realm = configPop.realm;
+				userConfigs.bgName = bgChanger.getBgName();
 				configPop.visible = false;
 				populateUser();
+				saveConfigFile();
 			});
 			
 			configPop.addEventListener("cancelPressed", function(e:Event):void{
@@ -123,6 +135,7 @@
 					loadUser.visible = false;
 					animateAlpha(userContainer,1,0,1,userContainer.x,userContainer.x);
 				});
+				saveConfigFile();
 			});
 			getInfo.addEventListener("userInfoError", function(e:Event){
 				trace("Error recuperando informacion del invocador");
@@ -145,7 +158,7 @@
 			});
 			//Seteos de Realm
 			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
-				Ssummoner.realm = realmSearch.realm;
+				Ssummoner.realm = realmSearch.realm.toLowerCase();
 				realmText.text = Ssummoner.realm.toUpperCase();
 			});
 			
@@ -154,12 +167,6 @@
 				else realmSearch.visible = true;
 				setChildIndex(realmSearch, numChildren - 1);
 			});
-			
-			//BG
-			bgImage.gotoAndStop("jinx");
-			
-			//Placeholder de summoner, condicional carga de usuario, seteo de loading state
-			setPlaceHolder(summonerNameSearch, "BUSCAR INVOCADOR");
 		}
 		
 		private function readyState():void
@@ -179,6 +186,9 @@
 			cleanStage();
 			loadingState();
 			Ssummoner.summonerName = summonerNameSearch.text;
+			userConfigs.summonerSearch = Ssummoner.summonerName;
+			userConfigs.realmSearch = Ssummoner.realm;
+			saveConfigFile();
 			lolApiRequest.search(Ssummoner.summonerName,Ssummoner.realm);
 		}
 		
@@ -291,38 +301,99 @@
 			TweenMax.to(mc,duration,{autoAlpha:alphaAmmount, x:xPos, onComplete:completeFunction});
 		}
 		
+		private function appConfigInit():void
+		{
+			//Shared objects
+			if(File.applicationStorageDirectory.resolvePath("prefs.conf").exists){
+				var configFile:File = File.applicationStorageDirectory.resolvePath("prefs.conf");
+				configFile.preventBackup = true;
+				
+				var fs:FileStream = new FileStream();
+				fs.open(configFile, FileMode.READ);
+				
+				userConfigs = fs.readObject();
+				fs.close();
+				trace("Carga de preferencias completa");
+			}
+			
+			configOptions();
+			stageOptions();
+		}
+		
+		private function configOptions():void
+		{
+			/*
+			var xml : XML = NativeApplication.nativeApplication.applicationDescriptor;
+			var ns : Namespace = xml.namespace();
+			var version : String = xml.ns::versionNumber;
+			versionInfo.text = "LOLInfo beta " + version;
+			*/
+			
+			if(userConfigs.bgName) bgImage.gotoAndStop(userConfigs.bgName);
+			else bgImage.gotoAndStop("jinx");
+				
+			if(userConfigs.summonerSearch){
+				Ssummoner.summonerName = userConfigs.summonerSearch;
+				summonerNameSearch.text = userConfigs.summonerSearch;
+			}
+			
+			if(userConfigs.realmSearch){
+				Ssummoner.realm = userConfigs.realmSearch.toLowerCase();
+				realmText.text = userConfigs.realmSearch.toUpperCase();
+			}
+			
+			//Placeholder de summoner, condicional carga de usuario, seteo de loading state
+			setPlaceHolder(summonerNameSearch, "BUSCAR INVOCADOR");
+
+		}
+		
+		private function saveConfigFile():void
+		{
+			var configFile:File = File.applicationStorageDirectory.resolvePath("prefs.conf");
+			var fs:FileStream = new FileStream();
+			fs.open(configFile, FileMode.WRITE);
+			fs.writeObject(userConfigs);
+			fs.close();
+		}
+		
 		private function errorHandler(e:Event):void
 		{
 			switch(e.type){
 				case "matchError":
-					trace("No se encontró una partida activa para el invocador solicitado.");
+					createError("No se encontró una partida activa para el invocador solicitado.");
 				break;
 				case "summonerError":
-					trace("No se encontró al invocador solicitado en este server.");
+					createError("No se encontró al invocador solicitado en este server.");
 				break;
 				case "champsError":
-					trace("No se pudo cargar la información estatica necesaria, verifique su conexion a internet y reincie la aplicación.");
+					createError("No se pudo cargar la información estatica necesaria, verifique su conexion a internet y reincie la aplicación.");
 				break;
 				case "versionError":
-					trace("No se pudo cargar la información estatica necesaria de ddragon, verifique su conexion a internet y reincie la aplicación.");
+					createError("No se pudo cargar la información estatica necesaria de ddragon, verifique su conexion a internet y reincie la aplicación.");
 				break;
 				case "tiersError":
-					trace("No se pudo cargar la información de liga necesaria, pruebe nuevamente.");
+					createError("No se pudo cargar la información de liga necesaria, pruebe nuevamente.");
 				break;
 				case "constError":
-					trace("No se pudo cargar la información de constantes necesaria, reinicie la aplicacion.");
+					createError("No se pudo cargar la información de constantes necesaria, reinicie la aplicacion.");
 				break;
 				case "appInfoError":
-					trace("No se pudo cargar la información de la aplicacion.");
+					createError("No se pudo cargar la información de la aplicacion.");
 				break;
 			}
 			readyState();
+		}
+		
+		private function createError(mensaje:String):void
+		{
+			errorPop.texto.text = mensaje;
+			TweenMax.to(errorPop,0.5,{autoAlpha:1,y:0});
 		}
 	}
 }
 
 /*
-PANTALLA DE INICIO
-SHARED OBJECTS
-SPECTEAR
+//PANTALLA DE INICIO
+//BUSCAR SUMMONER SIN ESTAR EN PARTIDA
+//SPECTEAR
 */

@@ -21,6 +21,11 @@
 		{
 			bgManager.nextFrame();
 		}
+		
+		public static function getBgName():String
+		{	
+			return bgManager.currentLabel;
+		}
 	}
 	
 }

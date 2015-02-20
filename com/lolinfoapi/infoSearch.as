@@ -47,6 +47,7 @@
 			loaderInformacion.addEventListener(Event.COMPLETE, function(e:Event):void{
 				var informacion:Object = JSON.parse(e.target.data);
 				appInfo = informacion;
+				trace("Carga de app info completa");
 				dispatchEvent(new Event("appInfoCompleta"));
 			});
 			
