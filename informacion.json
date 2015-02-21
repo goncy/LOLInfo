@@ -29,6 +29,16 @@
     		"badgeName": "Veterano",
     		"razon": "VETERANO",
     		"nombre": "Mati"
-    	}
+    	},
+    	"84968":{
+    		"badgeName": "Colaborador",
+    		"razon": "AYUDANTE",
+    		"nombre": "Javier peralta, timer"
+    	},
+        "600195":{
+            "badgeName": "Colaborador",
+            "razon": "AYUDANTE",
+            "nombre": "Dreamer, ts blaze it"
+        }
     }
 }

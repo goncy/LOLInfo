@@ -43,7 +43,7 @@
         }
 
         private function init(e:Event = null):void 
-        {			
+        {
             removeEventListener(Event.ADDED_TO_STAGE, init);
 			appConfigInit();
 			lolApiRequest.addEventListener("champsError", errorHandler);
@@ -388,6 +388,9 @@
 		{
 			errorPop.texto.text = mensaje;
 			TweenMax.to(errorPop,0.5,{autoAlpha:1,y:0});
+			TweenMax.delayedCall(2,function(){
+				TweenMax.to(errorPop,0.5,{autoAlpha:0,y:-30});
+			})
 		}
 	}
 }
@@ -396,4 +399,9 @@
 //PANTALLA DE INICIO
 //BUSCAR SUMMONER SIN ESTAR EN PARTIDA
 //SPECTEAR
+
+//PEDIDOS
+ELEGIR FONDO DE PANTALLA PERSONALIZADO
+DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
+PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
 */
