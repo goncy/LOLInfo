@@ -18,7 +18,7 @@
 -->
 <application xmlns="http://ns.adobe.com/air/application/13.0">
   <id>LOLInfo</id>
-  <versionNumber>2.2</versionNumber>
+  <versionNumber>2.1</versionNumber>
   <filename>LOLInfo</filename>
   <description>Informacion sobre partidas activas de League of Legends</description>
   <name>LOLInfo</name>

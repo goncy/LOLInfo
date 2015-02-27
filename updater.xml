@@ -1,8 +1,0 @@
-<update xmlns="http://ns.adobe.com/air/framework/update/description/2.5">
-    <versionNumber>2.2</versionNumber>
-    <url>https://raw.githubusercontent.com/goncy/LOLInfo/master/LOLInfo.air</url>
-    <description>
-		Cambios:
-		* Auto actualizable!
-	</description>
-</update>

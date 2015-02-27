@@ -8,9 +8,7 @@
 	import flash.events.MouseEvent;
 	import flash.events.FocusEvent;
 	import flash.events.ErrorEvent;
-	import air.update.events.StatusUpdateEvent;
-	import air.update.events.UpdateEvent;
-	import air.update.ApplicationUpdaterUI;
+	import flash.desktop.NativeApplication;
 	import com.lolinfoapi.LOLInfoApi;
 	import com.lolinfoapi.infoSearch;
 	import classes.playerSlot;
@@ -155,6 +153,7 @@
 			getAppInformation.getAppInfo();
 			getAppInformation.addEventListener("appInfoCompleta", function(e:Event):void{
 				appInfo = getAppInformation.appInfo;
+				checkUpdates();
 				animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,function(){
 					alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
 				});
@@ -306,7 +305,6 @@
 		
 		private function appConfigInit():void
 		{
-			configUpdater();
 			//Shared objects
 			if(File.applicationStorageDirectory.resolvePath("prefs.conf").exists){
 				var configFile:File = File.applicationStorageDirectory.resolvePath("prefs.conf");
@@ -386,29 +384,20 @@
 			TweenMax.to(errorPop,0.5,{autoAlpha:1,y:0});
 			TweenMax.delayedCall(2,function(){
 				TweenMax.to(errorPop,0.5,{autoAlpha:0,y:-30});
-			})
+			});
 		}
 		
-		private function configUpdater():void
+		private function getAppVersion():String {
+			var appXml:XML = NativeApplication.nativeApplication.applicationDescriptor;
+			var ns:Namespace = appXml.namespace();
+			var appVersion:String = appXml.ns::versionNumber[0];
+			return appVersion;
+		}
+		
+		private function checkUpdates():void
 		{
-			trace("Comprobando actualizaciones");
-			var appUpdater:ApplicationUpdaterUI = new ApplicationUpdaterUI;
-			appUpdater.addEventListener(UpdateEvent.INITIALIZED, function(e:UpdateEvent):void{
-				appUpdater.checkNow();
-			});
-			
-			appUpdater.addEventListener(ErrorEvent.ERROR, function(e:ErrorEvent):void{
-				createError("Error al comprobar actualizaciones.");
-			});
-			
-			appUpdater.updateURL = "https://raw.githubusercontent.com/goncy/LOLInfo/master/updater.xml";
-			appUpdater.delay = 5;
-			appUpdater.isCheckForUpdateVisible = false;
-			appUpdater.isDownloadUpdateVisible = true;
-			appUpdater.isDownloadProgressVisible = true;
-			appUpdater.isInstallUpdateVisible = true;
-			appUpdater.isFileUpdateVisible = true;
-			appUpdater.isUnexpectedErrorVisible = true;
+			trace(getAppVersion());
+			trace(appInfo.lastVersion);
 		}
 	}
 }
