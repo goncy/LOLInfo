@@ -6,23 +6,29 @@
 	import com.greensock.TweenMax;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import flash.filesystem.File;
 	
 	public class playerSlot extends MovieClip {
 		
 		private var redirecter;
 		
-		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object) {
-			setTooltip();
+		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object,obsKey:String,gameId:String,realms:Object) {
 			redirecter = new redirectBox(champArray[player.championId],player,realm);
 			division.gotoAndStop(player.tier);
 			tierLogo.gotoAndStop(player.tier);
 			spell1.gotoAndStop(String(player.spell1));
 			spell2.gotoAndStop(String(player.spell2));
-			if(badges[player.summonerId]){
-				badge.visible = true;
-				badge.setTexto(badges[player.summonerId].razon.toUpperCase());
-				badge.gotoAndStop(badges[player.summonerId].badgeName);
+			
+			try{
+				if(badges[player.summonerId]){
+					badge.visible = true;
+					badge.setTexto(badges[player.summonerId].razon.toUpperCase());
+					badge.gotoAndStop(badges[player.summonerId].badgeName);
+				}
+			}catch(e:Error){
+				trace(e);
 			}
+			
 			summonerName.text = player.summonerName;
 			div.text = player.division;
 			playerGs.text = player.gScore+" GS";
@@ -54,11 +60,14 @@
 				});
 				parent.parent.addChild(redirecter);
 			});
-		}
-		
-		private function setTooltip():void
-		{
-
+			
+			spectate.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+				var specAlert:spectateAlert = new spectateAlert(obsKey,gameId,realms[realm]);
+				specAlert.addEventListener("specCerrado", function(e:Event):void{
+					parent.parent.removeChild(specAlert);
+				});
+				parent.parent.addChild(specAlert);
+			});
 		}
 	}
 }

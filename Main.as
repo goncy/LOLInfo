@@ -7,7 +7,6 @@
 	import flash.filesystem.FileMode;
 	import flash.events.MouseEvent;
 	import flash.events.FocusEvent;
-	import flash.desktop.NativeApplication;
 	import com.lolinfoapi.LOLInfoApi;
 	import com.lolinfoapi.infoSearch;
 	import classes.playerSlot;
@@ -204,7 +203,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamA.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamA.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -221,7 +220,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamB.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamB.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -321,14 +320,7 @@
 		}
 		
 		private function configOptions():void
-		{
-			/*
-			var xml : XML = NativeApplication.nativeApplication.applicationDescriptor;
-			var ns : Namespace = xml.namespace();
-			var version : String = xml.ns::versionNumber;
-			versionInfo.text = "LOLInfo beta " + version;
-			*/
-			
+		{			
 			if(userConfigs.bgName) bgImage.gotoAndStop(userConfigs.bgName);
 			else bgImage.gotoAndStop("jinx");
 				
@@ -344,7 +336,6 @@
 			
 			//Placeholder de summoner, condicional carga de usuario, seteo de loading state
 			setPlaceHolder(summonerNameSearch, "BUSCAR INVOCADOR");
-
 		}
 		
 		private function saveConfigFile():void
@@ -400,8 +391,16 @@
 //BUSCAR SUMMONER SIN ESTAR EN PARTIDA
 //SPECTEAR
 
+"C:\Riot Games\League of Legends\RADS\solutions\lol_game_client_sln\releases\0.0.1.78\deploy\League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.la2.lol.riotgames.com:80 +6vaaXOa5EiBV9+NuM2uzPg6ZHE2C1hv 183408110 LA2"
+"C:\Riot Games\League of Legends\RADS\solutions\lol_game_client_sln\releases\0.0.1.79\deploy\League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.la2.lol.riotgames.com:80 +6vaaXOa5EiBV9+NuM2uzPg6ZHE2C1hv 183408110 LA2"
 //PEDIDOS
 ELEGIR FONDO DE PANTALLA PERSONALIZADO
 DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
+RANKED Y NORMAL MAIN BADGE
+NIVEL DE INVOCADOR EN BUSQUEDA
+REINTEGRAR BUILDS Y COUNTERS ADENTRO DE LA APP
+AUTOCOMPLETE EN BUSQUEDA DE INVOCADOR
+
+MATCH HISTORY PARA SIGNO MAS
 */
