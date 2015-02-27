@@ -75,6 +75,11 @@
             "badgeName": "Colaborador",
             "razon": "AYUDANTE",
             "nombre": "Porcentaje ganada"
+        },
+        "2141921":{
+            "badgeName": "Colaborador",
+            "razon": "AYUDANTE",
+            "nombre": "Starpool"
         }
     }
 }

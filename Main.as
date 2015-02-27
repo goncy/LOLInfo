@@ -397,15 +397,18 @@
 		
 		private function checkUpdates():void
 		{
+			trace("Buscando actualizaciones");
 			var appVer:Number = Number(getAppVersion());
 			var lastVer:Number = appInfo.lastVersion;
 			
 			if(appInfo.lastVersion>getAppVersion()){
 				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
 				var _updaterAlert:updaterAlert = new updaterAlert(appVer,lastVer,descarga);
+				_updaterAlert.alpha = 0;
 				_updaterAlert.addEventListener("cerrarUpdaterAlert", function(e:Event):void{
 					removeChild(_updaterAlert);
 				});
+				animateAlpha(_updaterAlert,1,0,1,0,0);
 				addChild(_updaterAlert);
 			}
 		}
