@@ -14,7 +14,7 @@
 		private var apiKey:String;
 		public var serverInfo:Object = {};
 		//User info
-		public static var Ssummoner:Object = new Object();
+		public var Ssummoner:Object = new Object();
 		//Game info
 		public var gameConstants:Object = new Object();
 		public var matchInfo:Object = new Object();

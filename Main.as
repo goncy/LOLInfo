@@ -23,6 +23,7 @@
 	//Greensock
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import classes.sumInfoAlert;
 	
 	public class Main extends MovieClip {
 		
@@ -30,7 +31,7 @@
 		private var api:String = "102651e0-be0a-4d8c-ab78-83ca5821efaa";
 		private var lolApiRequest:LOLInfoApi = new LOLInfoApi(api);
 		private var playersLoaded:int = 0;
-		private var Ssummoner:Object = new Object();
+		private var searchInfo:Object = new Object();
 		//Containers
 		private var matchContainer:MovieClip = new MovieClip();
 		//User related
@@ -113,9 +114,9 @@
 			userContainer.searchUser.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				cleanStage();
 				loadingState();
-				Ssummoner.summonerName = userInfo.name;
-				Ssummoner.realm = userInfo.realm.toLowerCase();
-				lolApiRequest.search(Ssummoner.summonerName,Ssummoner.realm);
+				searchInfo.summonerName = userInfo.name;
+				searchInfo.realm = userInfo.realm.toLowerCase();
+				lolApiRequest.search(searchInfo.summonerName,searchInfo.realm);
 			});
 		}
 		
@@ -161,8 +162,8 @@
 			});
 			//Seteos de Realm
 			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
-				Ssummoner.realm = realmSearch.realm.toLowerCase();
-				realmText.text = Ssummoner.realm.toUpperCase();
+				searchInfo.realm = realmSearch.realm.toLowerCase();
+				realmText.text = searchInfo.realm.toUpperCase();
 			});
 			
 			openRealmSearch.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){
@@ -188,11 +189,11 @@
 		{
 			cleanStage();
 			loadingState();
-			Ssummoner.summonerName = summonerNameSearch.text;
-			userConfigs.summonerSearch = Ssummoner.summonerName;
-			userConfigs.realmSearch = Ssummoner.realm;
+			searchInfo.summonerName = summonerNameSearch.text;
+			userConfigs.summonerSearch = searchInfo.summonerName;
+			userConfigs.realmSearch = searchInfo.realm;
 			saveConfigFile();
-			lolApiRequest.search(Ssummoner.summonerName,Ssummoner.realm);
+			lolApiRequest.search(searchInfo.summonerName,searchInfo.realm);
 		}
 		
 		private function generateMatchStage(e:Event)
@@ -207,7 +208,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamA.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamA.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -224,7 +225,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamB.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,Ssummoner.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamB.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -329,12 +330,12 @@
 			else bgImage.gotoAndStop("jinx");
 				
 			if(userConfigs.summonerSearch){
-				Ssummoner.summonerName = userConfigs.summonerSearch;
+				searchInfo.summonerName = userConfigs.summonerSearch;
 				summonerNameSearch.text = userConfigs.summonerSearch;
 			}
 			
 			if(userConfigs.realmSearch){
-				Ssummoner.realm = userConfigs.realmSearch.toLowerCase();
+				searchInfo.realm = userConfigs.realmSearch.toLowerCase();
 				realmText.text = userConfigs.realmSearch.toUpperCase();
 			}
 			
@@ -356,6 +357,13 @@
 			switch(e.type){
 				case "matchError":
 					createError("No se encontró una partida activa para el invocador solicitado.");
+				
+					var sumInfo:sumInfoAlert = new sumInfoAlert(lolApiRequest.Ssummoner);
+					sumInfo.addEventListener("sumInfoCerrado", function(e:Event):void{
+						removeChild(sumInfo);
+					});
+					
+					addChild(sumInfo);
 				break;
 				case "summonerError":
 					createError("No se encontró al invocador solicitado en este server.");
@@ -399,11 +407,12 @@
 		{
 			trace("Buscando actualizaciones");
 			var appVer:Number = Number(getAppVersion());
-			var lastVer:Number = appInfo.lastVersion;
+			var lastVer:Number = appInfo.versionInfo.lastVersion;
+			var changelog:String = appInfo.versionInfo.changelog;
 			
 			if(appInfo.lastVersion>getAppVersion()){
 				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
-				var _updaterAlert:updaterAlert = new updaterAlert(appVer,lastVer,descarga);
+				var _updaterAlert:updaterAlert = new updaterAlert(appVer,lastVer,descarga,changelog);
 				_updaterAlert.alpha = 0;
 				_updaterAlert.addEventListener("cerrarUpdaterAlert", function(e:Event):void{
 					removeChild(_updaterAlert);

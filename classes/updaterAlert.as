@@ -12,10 +12,11 @@
 		
 		private var updAlert;
 		
-		public function updaterAlert(appVer:Number,lastVer:Number,descarga:String) {
+		public function updaterAlert(appVer:Number,lastVer:Number,descarga:String,changelog:String) {
 			updAlert = this;
 			appVersion.text = String(appVer);
 			lastVersion.text = String(lastVer);
+			changeLog.htmlText = changelog;
 			
 			descargar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				navigateToURL(new URLRequest(descarga), "_blank");
