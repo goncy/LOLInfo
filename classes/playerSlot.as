@@ -29,6 +29,9 @@
 				trace(e);
 			}
 			
+			if(player.teamId===100) summonerName.textColor = 0x49AAFF;
+			if(player.teamId===200) summonerName.textColor = 0xE8020A;
+			
 			summonerName.text = player.summonerName;
 			div.text = player.division;
 			playerGs.text = player.gScore+" GS";
@@ -55,6 +58,13 @@
 			});
 			
 			goLk.addEventListener(MouseEvent.CLICK,function(lk:MouseEvent):void{
+				redirecter.cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+					parent.parent.removeChild(redirecter);
+				});
+				parent.parent.addChild(redirecter);
+			});
+			
+			goLkName.addEventListener(MouseEvent.CLICK,function(lkname:MouseEvent):void{
 				redirecter.cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 					parent.parent.removeChild(redirecter);
 				});

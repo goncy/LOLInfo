@@ -59,6 +59,21 @@
             "badgeName": "Colaborador",
             "razon": "AYUDANTE",
             "nombre": "GERMANKS"
+        },
+        "1117670":{
+            "badgeName": "Veterano",
+            "razon": "VETERANO",
+            "nombre": "ZadyOne"
+        },
+        "100673":{
+            "badgeName": "Colaborador",
+            "razon": "AYUDANTE",
+            "nombre": "Matias Carballo"
+        },
+        "260569":{
+            "badgeName": "Colaborador",
+            "razon": "AYUDANTE",
+            "nombre": "Porcentaje ganada"
         }
     }
 }

@@ -10,8 +10,13 @@
 			// constructor code
 			if(partida.matchInfo.queueType) map.text = partida.matchInfo.mapName.toUpperCase() + " ("+partida.matchInfo.queueType+")";
 			else map.text = partida.matchInfo.mapName.toUpperCase();
-			ascore.text = partida.teamA.score+" GS";
-			bscore.text = partida.teamB.score+" GS";
+			
+			var totalScore:int = partida.teamA.score + partida.teamB.score;
+			var teamAscore:int = Math.round((partida.teamA.score * 100) / totalScore);
+			var teamBscore:int = Math.round((partida.teamB.score * 100) / totalScore);
+			
+			ascore.text = teamAscore+"%";
+			bscore.text = teamBscore+"%";
 			
 			var itirator:int = 0;
 			

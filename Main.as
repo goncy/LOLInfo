@@ -7,6 +7,10 @@
 	import flash.filesystem.FileMode;
 	import flash.events.MouseEvent;
 	import flash.events.FocusEvent;
+	import flash.events.ErrorEvent;
+	import air.update.events.StatusUpdateEvent;
+	import air.update.events.UpdateEvent;
+	import air.update.ApplicationUpdaterUI;
 	import com.lolinfoapi.LOLInfoApi;
 	import com.lolinfoapi.infoSearch;
 	import classes.playerSlot;
@@ -302,6 +306,7 @@
 		
 		private function appConfigInit():void
 		{
+			configUpdater();
 			//Shared objects
 			if(File.applicationStorageDirectory.resolvePath("prefs.conf").exists){
 				var configFile:File = File.applicationStorageDirectory.resolvePath("prefs.conf");
@@ -383,24 +388,39 @@
 				TweenMax.to(errorPop,0.5,{autoAlpha:0,y:-30});
 			})
 		}
+		
+		private function configUpdater():void
+		{
+			trace("Comprobando actualizaciones");
+			var appUpdater:ApplicationUpdaterUI = new ApplicationUpdaterUI;
+			appUpdater.addEventListener(UpdateEvent.INITIALIZED, function(e:UpdateEvent):void{
+				appUpdater.checkNow();
+			});
+			
+			appUpdater.addEventListener(ErrorEvent.ERROR, function(e:ErrorEvent):void{
+				createError("Error al comprobar actualizaciones.");
+			});
+			
+			appUpdater.updateURL = "https://raw.githubusercontent.com/goncy/LOLInfo/master/updater.xml";
+			appUpdater.delay = 5;
+			appUpdater.isCheckForUpdateVisible = false;
+			appUpdater.isDownloadUpdateVisible = true;
+			appUpdater.isDownloadProgressVisible = true;
+			appUpdater.isInstallUpdateVisible = true;
+			appUpdater.isFileUpdateVisible = true;
+			appUpdater.isUnexpectedErrorVisible = true;
+		}
 	}
 }
 
 /*
 //PANTALLA DE INICIO
 //BUSCAR SUMMONER SIN ESTAR EN PARTIDA
-//SPECTEAR
 
-"C:\Riot Games\League of Legends\RADS\solutions\lol_game_client_sln\releases\0.0.1.78\deploy\League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.la2.lol.riotgames.com:80 +6vaaXOa5EiBV9+NuM2uzPg6ZHE2C1hv 183408110 LA2"
-"C:\Riot Games\League of Legends\RADS\solutions\lol_game_client_sln\releases\0.0.1.79\deploy\League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.la2.lol.riotgames.com:80 +6vaaXOa5EiBV9+NuM2uzPg6ZHE2C1hv 183408110 LA2"
 //PEDIDOS
-ELEGIR FONDO DE PANTALLA PERSONALIZADO
 DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
 RANKED Y NORMAL MAIN BADGE
 NIVEL DE INVOCADOR EN BUSQUEDA
-REINTEGRAR BUILDS Y COUNTERS ADENTRO DE LA APP
 AUTOCOMPLETE EN BUSQUEDA DE INVOCADOR
-
-MATCH HISTORY PARA SIGNO MAS
 */
