@@ -18,6 +18,7 @@
 	import classes.configAlert;
 	import classes.bgChanger;
 	import classes.redirectBox;
+	import classes.updaterAlert;
 	
 	//Greensock
 	import com.greensock.TweenMax;
@@ -396,8 +397,17 @@
 		
 		private function checkUpdates():void
 		{
-			trace(getAppVersion());
-			trace(appInfo.lastVersion);
+			var appVer:Number = Number(getAppVersion());
+			var lastVer:Number = appInfo.lastVersion;
+			
+			if(appInfo.lastVersion>getAppVersion()){
+				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
+				var _updaterAlert:updaterAlert = new updaterAlert(appVer,lastVer,descarga);
+				_updaterAlert.addEventListener("cerrarUpdaterAlert", function(e:Event):void{
+					removeChild(_updaterAlert);
+				});
+				addChild(_updaterAlert);
+			}
 		}
 	}
 }
