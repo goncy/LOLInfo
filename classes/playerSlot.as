@@ -30,7 +30,7 @@
 			}
 			
 			if(player.teamId===100) summonerName.textColor = 0x49AAFF;
-			if(player.teamId===200) summonerName.textColor = 0xE8020A;
+			if(player.teamId===200) summonerName.textColor = 0xFF1334;
 			
 			summonerName.text = player.summonerName;
 			div.text = player.division;
