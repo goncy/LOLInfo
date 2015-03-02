@@ -1,7 +1,7 @@
 {
-    "lastVersion": 2.2,
+    "lastVersion": 2.3,
     "versionInfo":{
-        "lastVersion": 2.2,
+        "lastVersion": 2.3,
         "changelog": "* En la version 2.2 pueden auto actualizar\n* Spectear partidas\n* Buscar informacion de invocadores que no esten en partida"
     },
     "informacion": {
