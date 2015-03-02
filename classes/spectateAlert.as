@@ -9,20 +9,28 @@
 	
 	public class spectateAlert extends MovieClip {
 		
-		var specAlert;
+		private var specAlert;
+		private var path;
 		
 		public function spectateAlert(obsKey:String,gameId:String,realm:String) {
 			specAlert = this;
-			buscar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
-				var buscarArchivo:File = new File();
-				buscarArchivo.addEventListener(Event.SELECT, function(e:Event):void{
-					var path = e.target.nativePath;
-					segundaVentana.visible = true;
-					segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
-					segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+			if(getPath()){
+				path = getPath();
+				segundaVentana.visible = true;
+				segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+				segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+			}else{
+				buscar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+					var buscarArchivo:File = new File();
+					buscarArchivo.addEventListener(Event.SELECT, function(e:Event):void{
+						var path = e.target.nativePath;
+						segundaVentana.visible = true;
+						segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+						segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+					});
+					buscarArchivo.browse();
 				});
-				buscarArchivo.browse();
-			});
+			}
 			cerrar.addEventListener(MouseEvent.CLICK, cerrarAlert);
 			segundaVentana.cerrar.addEventListener(MouseEvent.CLICK, cerrarAlert);
 		}
@@ -65,6 +73,28 @@
 				case "TR1":
 					return "spectator.tr.lol.riotgames.com:80";
 				break;
+			}
+			return "";
+		}
+		
+		private function getPath():String{
+			var directorio:File = File.userDirectory.resolvePath(getDisk()+":/Riot Games/League of Legends/RADS/solutions/lol_game_client_sln/releases");
+			if(directorio.isDirectory){
+				var leagueFile:File = File.userDirectory.resolvePath(directorio.getDirectoryListing()[0].nativePath+"/deploy/League Of Legends.exe");
+				return leagueFile.nativePath;
+			}
+			return "";
+		}
+
+		private function getDisk():String
+		{
+			var disks:Array = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
+			for(var i=0;i<disks.length;i++)
+			{
+				var folder:File = File.userDirectory.resolvePath(disks[i]+":/Riot Games");
+				if(folder.isDirectory) return disks[i];
+				i++;
 			}
 			return "";
 		}

@@ -31,7 +31,7 @@
 				navigateToURL(new URLRequest("http://www.lolking.net/summoner/"+summoner.realm+"/"+summoner.id+"#ranked-stats"));
 			});
 			
-			title.text = "No se encontró una partida para "+summoner.summonerName;
+			title.text = summoner.summonerName;
 			
 			cerrar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				TweenMax.to(alert,1,{autoAlpha:0,onComplete:function(){dispatchEvent(new Event("sumInfoCerrado"))}});

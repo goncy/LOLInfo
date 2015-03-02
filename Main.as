@@ -89,8 +89,12 @@
 			
 			configPop.addEventListener("cancelPressed", function(e:Event):void{
 				configPop.visible = false;
-				if(userInfo.summonerName) populateUser();
-				else onlyConfig.visible = true;
+				if(userInfo.summonerName){
+					configPop.visible = true;
+					populateUser();
+				}else{
+					onlyConfig.visible = true;
+				}
 			});
 			
 			onlyConfig.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
@@ -362,8 +366,8 @@
 					sumInfo.addEventListener("sumInfoCerrado", function(e:Event):void{
 						removeChild(sumInfo);
 					});
-					
 					addChild(sumInfo);
+					animateAlpha(sumInfo,1,0,1,0,0);
 				break;
 				case "summonerError":
 					createError("No se encontró al invocador solicitado en este server.");
@@ -410,6 +414,8 @@
 			var lastVer:Number = appInfo.versionInfo.lastVersion;
 			var changelog:String = appInfo.versionInfo.changelog;
 			
+			lolinfoVersion.text = "LOLInfo "+appVer;
+			
 			if(appInfo.lastVersion>getAppVersion()){
 				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
 				var _updaterAlert:updaterAlert = new updaterAlert(appVer,lastVer,descarga,changelog);
@@ -431,7 +437,11 @@
 //PEDIDOS
 DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
-RANKED Y NORMAL MAIN BADGE
 NIVEL DE INVOCADOR EN BUSQUEDA
+GUARDAR PATH DE LEAGUE.EXE EN USERINFO
+SEPARAR FUNCIONES DE CLASE PARA OBTENER TIER EXTERNAMENTE
+
+//NO NECESARIOS
 AUTOCOMPLETE EN BUSQUEDA DE INVOCADOR
+RANKED Y NORMAL MAIN BADGE
 */
