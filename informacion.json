@@ -2,11 +2,11 @@
     "lastVersion": 2.3,
     "versionInfo":{
         "lastVersion": 2.3,
-        "changelog": "* En la version 2.2 pueden auto actualizar\n* Spectear partidas\n* Buscar informacion de invocadores que no esten en partida"
+        "changelog": "* Arreglado el tema de seleccionar archivos al spectear partidas, ahora deberia detectarlo automaticamente (a menos que se haya cambiado el lugar de instalacion)\n* Nuevos badges!\n* Al setear nombre de invocador ahora muestra liga y division!"
     },
     "informacion": {
         "Titulo": "Hola Invocadores!",
-        "Texto": "Gente!\nYa pueden bajar la version 2.2 de la pagina de facebook!",
+        "Texto": "Gente!\nYa pueden bajar la version 2.3 de la pagina de facebook!",
         "id": "Este es mi mundo"
     },
     "badges": {
