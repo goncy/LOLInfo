@@ -109,6 +109,11 @@
             "badgeName": "Concurso",
             "razon": "CONCURSO",
             "nombre": "BLACKSTAR"
+        },
+        "302105":{
+            "badgeName": "Concurso",
+            "razon": "CONCURSO",
+            "nombre": "SOMPLE"
         }
     }
 }
