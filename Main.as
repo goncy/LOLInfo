@@ -133,6 +133,8 @@
 			getInfo.searchSummoner(userInfo.summonerName, userInfo.realm);
 			getInfo.addEventListener("userInfoCompleta", function(e:Event){
 				userInfo = getInfo.userInfo;
+				userContainer.userTier.gotoAndStop(userInfo.tier);
+				userContainer.userDivision.text = userInfo.division;
 				userContainer.sumName.text = userInfo.name;
 				userContainer.levelText.text = userInfo.realm+" | Level "+userInfo.summonerLevel;
 				userContainer.profileIcon.source = "http://ddragon.leagueoflegends.com/cdn/"+lolApiRequest.serverInfo.lastVersion+"/img/profileicon/"+userInfo.profileIconId+".png";
@@ -438,7 +440,6 @@
 DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
 NIVEL DE INVOCADOR EN BUSQUEDA
-GUARDAR PATH DE LEAGUE.EXE EN USERINFO
 SEPARAR FUNCIONES DE CLASE PARA OBTENER TIER EXTERNAMENTE
 
 //NO NECESARIOS

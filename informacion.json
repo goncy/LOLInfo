@@ -85,5 +85,29 @@
             "razon": "AYUDANTE",
             "nombre": "Starpool"
         }
+        ,
+        "28129":{
+            "badgeName": "Concurso",
+            "razon": "CONCURSO",
+            "nombre": "DARKSOLEX"
+        }
+        ,
+        "1566653":{
+            "badgeName": "Concurso",
+            "razon": "CONCURSO",
+            "nombre": "ZULKRAL"
+        }
+        ,
+        "156103":{
+            "badgeName": "Concurso",
+            "razon": "CONCURSO",
+            "nombre": "RAMZAMC"
+        }
+        ,
+        "1716785":{
+            "badgeName": "Concurso",
+            "razon": "CONCURSO",
+            "nombre": "DARKENSPELLER"
+        }
     }
 }

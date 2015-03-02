@@ -5,6 +5,7 @@
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.events.HTTPStatusEvent;
 	
 	public class infoSearch extends Sprite{
 		
@@ -24,15 +25,51 @@
 			requestSumInfo.url = "https://"+realm+".api.pvp.net/api/lol/"+realm+"/v1.4/summoner/by-name/"+summoner+"?api_key="+apiKey;
 			loaderSumInfo.load(requestSumInfo);
 			
-			loaderSumInfo.addEventListener(Event.COMPLETE, function(e:Event){
-				var sumInfo:Object = JSON.parse(e.target.data);
-				for(var key:String in sumInfo) userInfo = sumInfo[key];
-				userInfo.realm = realm.toUpperCase();
-				dispatchEvent(new Event("userInfoCompleta"));
+			loaderSumInfo.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderSumInfo.addEventListener(Event.COMPLETE, function(e:Event){
+						var sumInfo:Object = JSON.parse(e.target.data);
+						for(var key:String in sumInfo) userInfo = sumInfo[key];
+						userInfo.realm = realm.toUpperCase();
+						getSummonerTier(realm);
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("userInfoError"));
+				}
 			});
 			
 			loaderSumInfo.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("userInfoError"));
+			});
+		}
+		
+		private function getSummonerTier(realm:String):void
+		{
+			var loaderTier:URLLoader = new URLLoader();
+			var requestTier:URLRequest = new URLRequest();
+			
+			requestTier.url = "https://"+realm+".api.pvp.net/api/lol/"+realm+"/v2.5/league/by-summoner/"+userInfo.id+"/entry?api_key="+apiKey;
+			loaderTier.load(requestTier);
+			
+			loaderTier.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderTier.addEventListener(Event.COMPLETE, function(e:Event){
+						var sumTier:Object = JSON.parse(e.target.data);
+						for(var key:String in sumTier){
+							userInfo.tier = sumTier[key][0].tier;
+							userInfo.division = sumTier[key][0].entries[0].division;
+						}
+						dispatchEvent(new Event("userInfoCompleta"));
+					});
+				}else if(e.status===404){
+					userInfo.tier = "UNRANKED";
+					userInfo.division = "";
+					dispatchEvent(new Event("userInfoCompleta"));
+				};
+			});
+
+			loaderTier.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
+				dispatchEvent(new Event("userError"));
 			});
 		}
 		
