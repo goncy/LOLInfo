@@ -91,7 +91,6 @@
 				configPop.visible = false;
 				if(userInfo.name){
 					userContainer.visible = true;
-					populateUser();
 				}else{
 					onlyConfig.visible = true;
 				}
@@ -170,9 +169,16 @@
 			getAppInformation.addEventListener("appInfoCompleta", function(e:Event):void{
 				appInfo = getAppInformation.appInfo;
 				checkUpdates();
-				animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,function(){
-					alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
-				});
+				if(appInfo.informacion){
+					animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,function(){
+						alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
+					});
+				}
+			});
+			//Obtener Badges
+			getAppInformation.getBadges();
+			getAppInformation.addEventListener("badgesCompleta", function(e:Event):void{
+				appInfo.badges = getAppInformation.appInfo.badges;
 			});
 			//Seteos de Realm
 			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
@@ -396,6 +402,9 @@
 				break;
 				case "appInfoError":
 					createError("No se pudo cargar la información de la aplicacion.");
+				break;
+				case "badgesError":
+					createError("No se pudieron cargar los Badges.");
 				break;
 			}
 			readyState();

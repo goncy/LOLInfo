@@ -83,15 +83,48 @@
 			requestInformacion.url = "https://raw.githubusercontent.com/goncy/LOLInfo/master/informacion.json";
 			loaderInformacion.load(requestInformacion);
 			
-			loaderInformacion.addEventListener(Event.COMPLETE, function(e:Event):void{
-				var informacion:Object = JSON.parse(e.target.data);
-				appInfo = informacion;
-				trace("Carga de app info completa");
-				dispatchEvent(new Event("appInfoCompleta"));
+			loaderInformacion.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderInformacion.addEventListener(Event.COMPLETE, function(e:Event):void{
+						var informacion:Object = JSON.parse(e.target.data);
+						appInfo = informacion;
+						trace("Carga de app info completa");
+						dispatchEvent(new Event("appInfoCompleta"));
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("appInfoError"));
+				}
 			});
 			
 			loaderInformacion.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("appInfoError"));
+				return;
+			});
+		}
+		
+		public function getBadges():void
+		{
+			var loaderBadges:URLLoader = new URLLoader();
+			var requestBadges:URLRequest = new URLRequest();
+
+			requestBadges.url = "https://raw.githubusercontent.com/goncy/LOLInfo/master/badges.json";
+			loaderBadges.load(requestBadges);
+			
+			loaderBadges.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderBadges.addEventListener(Event.COMPLETE, function(e:Event):void{
+						var Badges:Object = JSON.parse(e.target.data);
+						appInfo.badges = Badges;
+						trace("Carga de badges completa");
+						dispatchEvent(new Event("badgesCompleta"));
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("badgesError"));
+				}
+			});
+			
+			loaderBadges.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
+				dispatchEvent(new Event("badgesError"));
 				return;
 			});
 		}
