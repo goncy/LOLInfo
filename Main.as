@@ -171,15 +171,16 @@
 				checkUpdates();
 				if(appInfo.informacion){
 					animateAlpha(alertBtn,1,0,1,alertBtn.x,alertBtn.x,function(){
-						alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
-					});
+					alertBtn.addEventListener(MouseEvent.CLICK, createAlert);
+				});
 				}
 			});
-			//Obtener Badges
+			/*/Obtener Badges
 			getAppInformation.getBadges();
 			getAppInformation.addEventListener("badgesCompleta", function(e:Event):void{
 				appInfo.badges = getAppInformation.appInfo.badges;
 			});
+			*/
 			//Seteos de Realm
 			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
 				searchInfo.realm = realmSearch.realm.toLowerCase();
