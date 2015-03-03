@@ -1,12 +1,12 @@
 {
-    "lastVersion": 2.3,
+    "lastVersion": 2.4,
     "versionInfo":{
-        "lastVersion": 2.3,
-        "changelog": "* Arreglado el tema de seleccionar archivos al spectear partidas, ahora deberia detectarlo automaticamente (a menos que se haya cambiado el lugar de instalacion)\n* Nuevos badges!\n* Al setear nombre de invocador ahora muestra liga y division!"
+        "lastVersion": 2.4,
+        "changelog": "Esto deberia solucionar un error reportado en el seteo de usuario!, perdon por tantas actualizaciones, pero estamos saliendo de beta!"
     },
     "informacion": {
         "Titulo": "Hola Invocadores!",
-        "Texto": "Gente!\nYa pueden bajar la version 2.3 de la pagina de facebook!",
+        "Texto": "Gente!\nYa pueden bajar la version 2.4 de la pagina de facebook!",
         "id": "Este es mi mundo"
     },
     "badges": {

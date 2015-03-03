@@ -65,19 +65,19 @@
 		private function userHandler():void
 		{
 			setUserConfig();
-			if(userInfo.summonerName) populateUser();
+			if(userConfigs.summonerName) populateUser();
 			else onlyConfig.visible = true;
 		}
 		
 		private function setUserConfig():void
 		{
-			userInfo.summonerName = userConfigs.summonerName;
+			userInfo.name = userConfigs.summonerName;
 			userInfo.realm = userConfigs.realm;
 			
 			userContainer.searchUser.buttonMode = true;
 			
 			configPop.addEventListener("okPressed", function(e:Event):void{
-				userInfo.summonerName = configPop.user;
+				userInfo.name = configPop.user;
 				userInfo.realm = configPop.realm;
 				userConfigs.summonerName = configPop.user;
 				userConfigs.realm = configPop.realm;
@@ -89,8 +89,8 @@
 			
 			configPop.addEventListener("cancelPressed", function(e:Event):void{
 				configPop.visible = false;
-				if(userInfo.summonerName){
-					configPop.visible = true;
+				if(userInfo.name){
+					userContainer.visible = true;
 					populateUser();
 				}else{
 					onlyConfig.visible = true;
@@ -100,11 +100,19 @@
 			onlyConfig.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				onlyConfig.visible = false;
 				configPop.visible = true;
+				if(userInfo.name){
+					configPop._user.text = userInfo.name;
+					configPop._realm.text = userInfo.realm;
+				}
 			});
 			
 			userContainer.configIcon.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 				userContainer.visible = false;
 				configPop.visible = true;
+				if(userInfo.name){
+					configPop._user.text = userInfo.name;
+					configPop._realm.text = userInfo.realm;
+				}
 			});
 			
 			userContainer.searchUser.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void{
@@ -130,7 +138,7 @@
 			loadUser.visible = true;
 			
 			var getInfo:infoSearch = new infoSearch(api);
-			getInfo.searchSummoner(userInfo.summonerName, userInfo.realm);
+			getInfo.searchSummoner(userInfo.name, userInfo.realm);
 			getInfo.addEventListener("userInfoCompleta", function(e:Event){
 				userInfo = getInfo.userInfo;
 				userContainer.userTier.gotoAndStop(userInfo.tier);
@@ -434,13 +442,10 @@
 
 /*
 //PANTALLA DE INICIO
-//BUSCAR SUMMONER SIN ESTAR EN PARTIDA
 
 //PEDIDOS
-DIVISION AL BUSCAR INVOCADOR (CON TIER AL COSTADO)
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
 NIVEL DE INVOCADOR EN BUSQUEDA
-SEPARAR FUNCIONES DE CLASE PARA OBTENER TIER EXTERNAMENTE
 
 //NO NECESARIOS
 AUTOCOMPLETE EN BUSQUEDA DE INVOCADOR

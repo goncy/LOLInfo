@@ -21,6 +21,8 @@
 		{
 			var loaderSumInfo:URLLoader = new URLLoader();
 			var requestSumInfo:URLRequest = new URLRequest();
+			
+			realm = realm.toLowerCase();
 
 			requestSumInfo.url = "https://"+realm+".api.pvp.net/api/lol/"+realm+"/v1.4/summoner/by-name/"+summoner+"?api_key="+apiKey;
 			loaderSumInfo.load(requestSumInfo);

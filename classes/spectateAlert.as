@@ -27,6 +27,7 @@
 						segundaVentana.visible = true;
 						segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
 						segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+						trace(segundaVentana.codigo2.text);
 					});
 					buscarArchivo.browse();
 				});
