@@ -98,7 +98,6 @@
 			
 			loaderInformacion.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("appInfoError"));
-				return;
 			});
 		}
 		
@@ -125,7 +124,6 @@
 			
 			loaderBadges.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("badgesError"));
-				return;
 			});
 		}
 	}
