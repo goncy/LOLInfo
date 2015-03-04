@@ -7,6 +7,7 @@
 	import flash.events.MouseEvent;
 	import flash.events.IOErrorEvent;
 	import flash.errors.IOError;
+	import flash.events.HTTPStatusEvent;
 
 	public class LOLInfoApi extends Sprite 
 	{
@@ -69,17 +70,22 @@
 			requestChamp.url = "https://global.api.pvp.net/api/lol/static-data/las/v1.2/champion?dataById=true&=true&api_key="+apiKey;
 			loaderChamp.load(requestChamp);
 			
-			loaderChamp.addEventListener(Event.COMPLETE, function(e:Event){
-				var champs:Object = JSON.parse(e.target.data);
-				serverInfo.lastVersion = champs.version;
-				champArray = champs.data;
-				trace("Carga de champs completa");
-				dispatchEvent(new Event("champsCompleta"));
+			loaderChamp.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderChamp.addEventListener(Event.COMPLETE, function(e:Event){
+						var champs:Object = JSON.parse(e.target.data);
+						serverInfo.lastVersion = champs.version;
+						champArray = champs.data;
+						trace("Carga de champs completa");
+						dispatchEvent(new Event("champsCompleta"));
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("champsError"));
+				};
 			});
 			
 			loaderChamp.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("champsError"));
-				return;
 			});
 		}
 		
@@ -91,16 +97,21 @@
 			requestSumInfo.url = "https://"+Ssummoner.realm+".api.pvp.net/api/lol/"+Ssummoner.realm+"/v1.4/summoner/by-name/"+Ssummoner.summonerName+"?api_key="+apiKey;
 			loaderSumInfo.load(requestSumInfo);
 			
-			loaderSumInfo.addEventListener(Event.COMPLETE, function(e:Event){
-				var sumInfo:Object = JSON.parse(e.target.data);
-				for(var key:String in sumInfo) Ssummoner.id = sumInfo[key].id;
-				dispatchEvent(new Event("summonerCompleta"));
-				retrieveMatch();
+			loaderSumInfo.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderSumInfo.addEventListener(Event.COMPLETE, function(e:Event){
+						var sumInfo:Object = JSON.parse(e.target.data);
+						for(var key:String in sumInfo) Ssummoner.id = sumInfo[key].id;
+						dispatchEvent(new Event("summonerCompleta"));
+						retrieveMatch();
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("summonerError"));
+				};
 			});
 			
 			loaderSumInfo.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("summonerError"));
-				return;
 			});
 		}
 		
@@ -114,11 +125,16 @@
 			requestMatch.url = "https://"+Ssummoner.realm+".api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/"+matchRealm+"/"+Ssummoner.id+"?api_key="+apiKey;
 			loaderMatch.load(requestMatch);
 			
-			loaderMatch.addEventListener(Event.COMPLETE, getMatch);
+			loaderMatch.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){			
+					loaderMatch.addEventListener(Event.COMPLETE, getMatch);
+				}else if(e.status===404){
+					dispatchEvent(new Event("matchError"));
+				};
+			});
 			
 			loaderMatch.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("matchError"));
-				return;
 			});
 		}
 		
@@ -145,63 +161,68 @@
 			var requestTiers:URLRequest = new URLRequest();
 			
 			requestTiers.url = "https://"+Ssummoner.realm+".api.pvp.net/api/lol/"+Ssummoner.realm+"/v2.5/league/by-summoner/"+playersId+"/entry?api_key="+apiKey;
-			loaderTiers.addEventListener(Event.COMPLETE, function(eTiers:Event){
-				var tiersData:Object = JSON.parse(eTiers.target.data);
-
-				for (var tierClass in tiersData){
-					var tierId = int(tierClass);
-					var indexPlayer = playersId.indexOf(tierId);
-					
-					players[indexPlayer].tier = tiersData[tierClass][0].tier;
-					players[indexPlayer].division = tiersData[tierClass][0].entries[0].division;
-					players[indexPlayer].lp = tiersData[tierClass][0].entries[0].leaguePoints;
-					players[indexPlayer].wins = tiersData[tierClass][0].entries[0].wins;
-					players[indexPlayer].losses = tiersData[tierClass][0].entries[0].losses;
-					players[indexPlayer].gScore = getScore(players[indexPlayer]);
-					players[indexPlayer].spell1 = gameConstants.spells[players[indexPlayer].spell1Id];
-					players[indexPlayer].spell2 = gameConstants.spells[players[indexPlayer].spell2Id];
-					
-					if(players[indexPlayer].teamId===100){
-						teamA.players.push(players[indexPlayer]);
-						teamA.score += players[indexPlayer].gScore;
-					}else if(players[indexPlayer].teamId===200){
-						teamB.players.push(players[indexPlayer]);
-						teamB.score += players[indexPlayer].gScore;
-					}
-					
-					players.splice(indexPlayer,1);
-					playersId.splice(indexPlayer,1);
-				}
-				
-				for(var i=0;i<players.length;i=0){
-					players[i].tier = "UNRANKED";
-					players[i].spell1 = gameConstants.spells[players[i].spell1Id];
-					players[i].spell2 = gameConstants.spells[players[i].spell2Id];
-					players[i].division = "";
-					players[i].lp = 0;
-					players[i].wins = 0;
-					players[i].losses = 0;
-					players[i].gScore = 10;
-					if(players[i].teamId===100){
-						teamA.players.push(players[i]);
-						teamA.score += players[i].gScore;
-					}else if(players[i].teamId===200){
-						teamB.players.push(players[i]);
-						teamB.score += players[i].gScore;
-					}
-					
-					players.splice(i,1);
-					playersId.splice(i,1);
-				};
-				trace("Carga match completa");
-				dispatchEvent(new Event("matchCompleta"));
-			});
-			
 			loaderTiers.load(requestTiers);
-			
+
+			loaderTiers.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){		
+					loaderTiers.addEventListener(Event.COMPLETE, function(eTiers:Event){
+						var tiersData:Object = JSON.parse(eTiers.target.data);
+
+						for (var tierClass in tiersData){
+							var tierId = int(tierClass);
+							var indexPlayer = playersId.indexOf(tierId);
+							
+							players[indexPlayer].tier = tiersData[tierClass][0].tier;
+							players[indexPlayer].division = tiersData[tierClass][0].entries[0].division;
+							players[indexPlayer].lp = tiersData[tierClass][0].entries[0].leaguePoints;
+							players[indexPlayer].wins = tiersData[tierClass][0].entries[0].wins;
+							players[indexPlayer].losses = tiersData[tierClass][0].entries[0].losses;
+							players[indexPlayer].gScore = getScore(players[indexPlayer]);
+							players[indexPlayer].spell1 = gameConstants.spells[players[indexPlayer].spell1Id];
+							players[indexPlayer].spell2 = gameConstants.spells[players[indexPlayer].spell2Id];
+							
+							if(players[indexPlayer].teamId===100){
+								teamA.players.push(players[indexPlayer]);
+								teamA.score += players[indexPlayer].gScore;
+							}else if(players[indexPlayer].teamId===200){
+								teamB.players.push(players[indexPlayer]);
+								teamB.score += players[indexPlayer].gScore;
+							}
+							
+							players.splice(indexPlayer,1);
+							playersId.splice(indexPlayer,1);
+						}
+						
+						for(var i=0;i<players.length;i=0){
+							players[i].tier = "UNRANKED";
+							players[i].spell1 = gameConstants.spells[players[i].spell1Id];
+							players[i].spell2 = gameConstants.spells[players[i].spell2Id];
+							players[i].division = "";
+							players[i].lp = 0;
+							players[i].wins = 0;
+							players[i].losses = 0;
+							players[i].gScore = 10;
+							if(players[i].teamId===100){
+								teamA.players.push(players[i]);
+								teamA.score += players[i].gScore;
+							}else if(players[i].teamId===200){
+								teamB.players.push(players[i]);
+								teamB.score += players[i].gScore;
+							}
+							
+							players.splice(i,1);
+							playersId.splice(i,1);
+						};
+						trace("Carga match completa");
+						dispatchEvent(new Event("matchCompleta"));
+					});
+				}else if(e.status===404){
+					dispatchEvent(new Event("tiersError"));
+				};
+			});
+						
 			loaderTiers.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
 				dispatchEvent(new Event("tiersError"));
-				return;
 			});
 		}
 		

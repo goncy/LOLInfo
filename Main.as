@@ -176,12 +176,6 @@
 				}
 			});
 			
-			//Obtener Badges
-			getAppInformation.getBadges();
-			getAppInformation.addEventListener("badgesCompleta", function(e:Event):void{
-				appInfo.badges = getAppInformation.appInfo.badges;
-			});
-			
 			//Seteos de Realm
 			realmSearch.addEventListener("searchRealmCambiado", function(e:Event){
 				searchInfo.realm = realmSearch.realm.toLowerCase();
