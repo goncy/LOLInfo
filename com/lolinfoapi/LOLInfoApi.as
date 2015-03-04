@@ -132,10 +132,6 @@
 					dispatchEvent(new Event("matchError"));
 				};
 			});
-			
-			loaderMatch.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
-				dispatchEvent(new Event("matchError"));
-			});
 		}
 		
 		private function getMatch(e:Event):void 
