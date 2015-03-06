@@ -17,16 +17,16 @@
 			if(getPath()){
 				path = getPath();
 				segundaVentana.visible = true;
-				segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
-				segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+				segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm+"\"";
+				segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm+"\"";
 			}else{
 				buscar.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
 					var buscarArchivo:File = new File();
 					buscarArchivo.addEventListener(Event.SELECT, function(e:Event):void{
 						var path = e.target.nativePath;
 						segundaVentana.visible = true;
-						segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
-						segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm;
+						segundaVentana.codigo.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm+"\"";
+						segundaVentana.codigo2.text = "\""+path+"\" \"8394\" \"LoLLauncher.exe\" \"\" \"spectator "+getPlataform(realm)+" "+obsKey+" "+gameId+" "+realm+"\"";
 						trace(segundaVentana.codigo2.text);
 					});
 					buscarArchivo.browse();
