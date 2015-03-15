@@ -7,12 +7,16 @@
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.filesystem.File;
+	import flash.events.HTTPStatusEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.events.IOErrorEvent;
 	
 	public class playerSlot extends MovieClip {
 		
 		private var redirecter;
 		
-		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object,obsKey:String,gameId:String,realms:Object) {
+		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object,obsKey:String,gameId:String,realms:Object,apiKey:String) {
 			redirecter = new redirectBox(champArray[player.championId],player,realm);
 			division.gotoAndStop(player.tier);
 			tierLogo.gotoAndStop(player.tier);
@@ -78,6 +82,60 @@
 				});
 				parent.parent.addChild(specAlert);
 			});
+			
+			getChampTier(apiKey,player,realm);
+		}
+		
+		private function getChampTier(apiKey:String,player:Object,realm:String):void{
+			var loaderHistory:URLLoader = new URLLoader();
+			var requestHistory:URLRequest = new URLRequest();
+
+			requestHistory.url = "https://"+realm+".api.pvp.net/api/lol/"+realm+"/v2.2/matchhistory/"+player.summonerId+"?championIds="+player.championId+"&api_key="+apiKey;
+			loaderHistory.load(requestHistory);
+					
+			loaderHistory.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+				if(e.status===200){
+					loaderHistory.addEventListener(Event.COMPLETE, function(e:Event){
+						var history:Object = JSON.parse(e.target.data);
+						if(history.matches){
+							var champData = history.matches[0].participants[0].stats;
+							var matchData = history.matches[0].participants[0].timeline;
+							cTier.gotoAndStop(calcularTier(champData,matchData));
+							//trace(history.matches[0].participants[0].highestAchievedSeasonTier);
+							finCarga();
+						}else{
+							finCarga();
+						}						
+					});
+				}else if(e.status===404){
+					finCarga();
+				}
+			});
+			
+			loaderHistory.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent){
+				finCarga();
+			});
+		}
+		
+		private function calcularTier(champData:Object,matchData:Object):Number{
+			if(!matchData.role==="DUO_SUPPORT"){
+				if(Number(champData.kills - champData.deaths + (champData.assists / 2)) > 15) return 5;
+				if(Number(champData.kills - champData.deaths + (champData.assists / 2)) > 10) return 4;
+				if(Number(champData.kills - champData.deaths + (champData.assists / 2)) > 7) return 3;
+				if(Number(champData.kills - champData.deaths + (champData.assists / 2)) > 5) return 2;
+				if(Number(champData.kills - champData.deaths + (champData.assists / 2)) < 5) return 1;
+			}else{
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 15) return 8;
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 10) return 4;
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 7) return 3;
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 5) return 1;
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) < 5) return 1;
+			}
+			return 0;
+		}
+		
+		private function finCarga(){
+			dispatchEvent(new Event("infoCargada"));
 		}
 	}
 }

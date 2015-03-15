@@ -8,8 +8,8 @@
 	public class bannedChamp extends MovieClip {
 		
 		
-		public function bannedChamp(champ:String) {
-			champPhoto.source = "http://ddragon.leagueoflegends.com/cdn/5.2.2/img/champion/"+champ+".png";
+		public function bannedChamp(champ:String,version:String) {
+			champPhoto.source = "http://ddragon.leagueoflegends.com/cdn/"+version+"/img/champion/"+champ+".png";
 			champPhoto.addEventListener(Event.COMPLETE, function(e:Event){
 				e.target.content.smoothing = true;
 				e.target.alpha = 0;

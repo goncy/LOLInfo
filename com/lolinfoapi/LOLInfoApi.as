@@ -132,6 +132,10 @@
 					dispatchEvent(new Event("matchError"));
 				};
 			});
+			
+			loaderMatch.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
+				dispatchEvent(new Event("matchIOError"));
+			});
 		}
 		
 		private function getMatch(e:Event):void 
@@ -188,33 +192,38 @@
 							players.splice(indexPlayer,1);
 							playersId.splice(indexPlayer,1);
 						}
-						
-						for(var i=0;i<players.length;i=0){
-							players[i].tier = "UNRANKED";
-							players[i].spell1 = gameConstants.spells[players[i].spell1Id];
-							players[i].spell2 = gameConstants.spells[players[i].spell2Id];
-							players[i].division = "";
-							players[i].lp = 0;
-							players[i].wins = 0;
-							players[i].losses = 0;
-							players[i].gScore = 10;
-							if(players[i].teamId===100){
-								teamA.players.push(players[i]);
-								teamA.score += players[i].gScore;
-							}else if(players[i].teamId===200){
-								teamB.players.push(players[i]);
-								teamB.score += players[i].gScore;
-							}
-							
-							players.splice(i,1);
-							playersId.splice(i,1);
-						};
-						trace("Carga match completa");
-						dispatchEvent(new Event("matchCompleta"));
+						parseUnrankeds();
 					});
 				}else if(e.status===404){
+					parseUnrankeds();
 					dispatchEvent(new Event("tiersError"));
 				};
+				
+				function parseUnrankeds(){
+					for(var i=0;i<players.length;i=0){
+						players[i].tier = "UNRANKED";
+						players[i].spell1 = gameConstants.spells[players[i].spell1Id];
+						players[i].spell2 = gameConstants.spells[players[i].spell2Id];
+						players[i].division = "";
+						players[i].lp = 0;
+						players[i].wins = 0;
+						players[i].losses = 0;
+						players[i].gScore = 10;
+						if(players[i].teamId===100){
+							teamA.players.push(players[i]);
+							teamA.score += players[i].gScore;
+						}else if(players[i].teamId===200){
+							teamB.players.push(players[i]);
+							teamB.score += players[i].gScore;
+						}
+						
+						players.splice(i,1);
+						playersId.splice(i,1);
+					};
+					
+					trace("Carga match completa");
+					dispatchEvent(new Event("matchCompleta"));
+				}
 			});
 						
 			loaderTiers.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){

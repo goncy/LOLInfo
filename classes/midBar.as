@@ -21,7 +21,7 @@
 			var itirator:int = 0;
 			
 			if(partida.teamA.bans) for each(var banA in partida.teamA.bans){
-				var banteamA:bannedChamp = new bannedChamp(partida.champArray[banA].key);
+				var banteamA:bannedChamp = new bannedChamp(partida.champArray[banA].key,partida.serverInfo.lastVersion);
 				banteamA.y = 33;
 				banteamA.x = 75+(itirator*35);
 				itirator++;
@@ -29,7 +29,7 @@
 			}		
 			
 			if(partida.teamB.bans) for each(var banB in partida.teamB.bans){
-				var banteamB:bannedChamp = new bannedChamp(partida.champArray[banB].key);
+				var banteamB:bannedChamp = new bannedChamp(partida.champArray[banB].key,partida.serverInfo.lastVersion);
 				banteamB.y = 33;
 				banteamB.x = 468+(itirator*35);
 				itirator++;

@@ -123,11 +123,13 @@
 			});
 			
 			userContainer.searchUser.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
-				cleanStage();
-				loadingState();
-				searchInfo.summonerName = userInfo.name;
-				searchInfo.realm = userInfo.realm.toLowerCase();
-				lolApiRequest.search(searchInfo.summonerName,searchInfo.realm);
+				if(!appInfo.loading){
+					cleanStage();
+					loadingState();
+					searchInfo.summonerName = userInfo.name;
+					searchInfo.realm = userInfo.realm.toLowerCase();
+					lolApiRequest.search(searchInfo.summonerName,searchInfo.realm);
+				}
 			});
 		}
 		
@@ -193,12 +195,14 @@
 		{
 			_searchMatch.visible = true;
 			loadingAnim.visible = false;
+			appInfo.loading = false;
 		}
 		
 		private function loadingState():void
 		{
 			_searchMatch.visible = false;
 			loadingAnim.visible = true;
+			appInfo.loading = true;
 		}
 		
 		public function searchMatch(e:MouseEvent):void
@@ -224,7 +228,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamA.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms,api);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamA.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -241,7 +245,7 @@
 		{
 			var itirator:int = 0;
 			for each(var player in lolApiRequest.teamB.players){
-				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms);
+				var slot:playerSlot = new playerSlot(player,lolApiRequest.serverInfo.lastVersion,lolApiRequest.champArray,searchInfo.realm,appInfo.badges,lolApiRequest.matchInfo.observers.encryptionKey,lolApiRequest.matchInfo.gameId,lolApiRequest.gameConstants.realms,api);
 				var poser:int = lolApiRequest.gameConstants.slotPos[lolApiRequest.teamB.players.length];
 				itirator++;
 				slot.x = poser+(itirator*140)-140;
@@ -254,7 +258,7 @@
 			}
 			
 			if(playersLoaded === lolApiRequest.matchInfo.participants.length){
-				slot.addEventListener("splashCargado", function(e:Event):void{
+				slot.addEventListener("infoCargada", function(e:Event):void{
 					TweenMax.delayedCall(1,addToStage);
 				});
 			}
@@ -371,15 +375,16 @@
 		private function errorHandler(e:Event):void
 		{
 			switch(e.type){
-				case "matchError":
-					createError("No se encontró una partida activa para el invocador solicitado.");
-				
+				case "matchError":				
 					var sumInfo:sumInfoAlert = new sumInfoAlert(lolApiRequest.Ssummoner);
 					sumInfo.addEventListener("sumInfoCerrado", function(e:Event):void{
 						removeChild(sumInfo);
 					});
 					addChild(sumInfo);
 					animateAlpha(sumInfo,1,0,1,0,0);
+				break;
+				case "matchIOError":
+					createError("Hubo un error buscando la partida.");
 				break;
 				case "summonerError":
 					createError("No se encontró al invocador solicitado en este server.");
@@ -451,6 +456,7 @@
 //PEDIDOS
 PARTIDAS JUGADAS CON EL CAMPEON ACTIVO
 NIVEL DE INVOCADOR EN BUSQUEDA
+ARREGLAR BUSCAR AL TOCAR ICONO DE INVOCADOR
 
 //NO NECESARIOS
 AUTOCOMPLETE EN BUSQUEDA DE INVOCADOR
