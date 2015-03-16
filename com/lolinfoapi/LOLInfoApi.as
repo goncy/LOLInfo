@@ -200,29 +200,53 @@
 				};
 				
 				function parseUnrankeds(){
-					for(var i=0;i<players.length;i=0){
-						players[i].tier = "UNRANKED";
-						players[i].spell1 = gameConstants.spells[players[i].spell1Id];
-						players[i].spell2 = gameConstants.spells[players[i].spell2Id];
-						players[i].division = "";
-						players[i].lp = 0;
-						players[i].wins = 0;
-						players[i].losses = 0;
-						players[i].gScore = 10;
-						if(players[i].teamId===100){
-							teamA.players.push(players[i]);
-							teamA.score += players[i].gScore;
-						}else if(players[i].teamId===200){
-							teamB.players.push(players[i]);
-							teamB.score += players[i].gScore;
-						}
-						
-						players.splice(i,1);
-						playersId.splice(i,1);
-					};
+					trace();
 					
-					trace("Carga match completa");
-					dispatchEvent(new Event("matchCompleta"));
+					var loaderLevels:URLLoader = new URLLoader();
+					var requestLevels:URLRequest = new URLRequest();
+					
+					requestLevels.url = "https://"+Ssummoner.realm+".api.pvp.net/api/lol/"+Ssummoner.realm+"/v1.4/summoner/"+playersId.toString()+"?api_key="+apiKey;
+					loaderLevels.load(requestLevels);
+
+					loaderLevels.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, function(e:HTTPStatusEvent){
+						if(e.status===200){		
+							loaderLevels.addEventListener(Event.COMPLETE, function(eLevels:Event){
+								var levelsData:Object = JSON.parse(eLevels.target.data);
+
+								for (var levelClass in levelsData){
+									var levelId = int(levelClass);
+									var indexPlayer = playersId.indexOf(levelId);
+									
+									players[indexPlayer].tier = "UNRANKED";
+									players[indexPlayer].nivel = levelsData[levelId].summonerLevel;
+									players[indexPlayer].spell1 = gameConstants.spells[players[indexPlayer].spell1Id];
+									players[indexPlayer].spell2 = gameConstants.spells[players[indexPlayer].spell2Id];
+									players[indexPlayer].division = "";
+									players[indexPlayer].lp = 0;
+									players[indexPlayer].wins = 0;
+									players[indexPlayer].losses = 0;
+									players[indexPlayer].gScore = 10;
+									if(players[indexPlayer].teamId===100){
+										teamA.players.push(players[indexPlayer]);
+										teamA.score += players[indexPlayer].gScore;
+									}else if(players[indexPlayer].teamId===200){
+										teamB.players.push(players[indexPlayer]);
+										teamB.score += players[indexPlayer].gScore;
+									}
+									
+									players.splice(indexPlayer,1);
+									playersId.splice(indexPlayer,1);
+								}
+								
+								trace("Carga match completa");
+								dispatchEvent(new Event("matchCompleta"));
+							});
+						}
+					});
+					
+					loaderLevels.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
+						dispatchEvent(new Event("matchCompleta"));
+					});
 				}
 			});
 						

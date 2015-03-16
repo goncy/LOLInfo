@@ -1,12 +1,12 @@
 {
-    "lastVersion": 2.6,
+    "lastVersion": 2.7,
     "versionInfo":{
-        "lastVersion": 2.6,
-        "changelog": "Esto deberia solucionar un error reportado en el seteo de usuario!, perdon por tantas actualizaciones, pero estamos saliendo de beta!"
+        "lastVersion": 2.7,
+        "changelog": "Cambios en los valores de GS y agregado el nivel del summoner en caso de no ser 30!"
     },
     "informacion": {
         "Titulo": "Hola Invocadores!",
-        "Texto": "Gente!\nYa pueden bajar la version 2.5 de la pagina de facebook!\n\nO de aca:\nhttps://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true\n\n\nLa persona que tenga problemas a la hora de spectear partidas, agregue al link unas comillas (\") al final del link!",
+        "Texto": "Gente!\nYa pueden bajar la version 2.7 de la pagina de facebook!\n\nO de aca:\nhttps://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true\n\n\nLa persona que tenga problemas a la hora de spectear partidas, agregue al link unas comillas (\") al final del link!",
         "id": "Este es mi mundo"
     }
 }

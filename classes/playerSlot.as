@@ -18,8 +18,14 @@
 		
 		public function playerSlot(player:Object,version:String,champArray:Object,realm:String,badges:Object,obsKey:String,gameId:String,realms:Object,apiKey:String) {
 			redirecter = new redirectBox(champArray[player.championId],player,realm);
-			division.gotoAndStop(player.tier);
-			tierLogo.gotoAndStop(player.tier);
+			if(player.tier==="UNRANKED"){
+				tierLogo.visible = false;
+				playerLevel.text = "Nivel\n"+player.nivel;
+			}else{
+				division.gotoAndStop(player.tier);
+				tierLogo.gotoAndStop(player.tier);
+			}
+			playerGs.text = addScore(player.gScore)+" GS";
 			spell1.gotoAndStop(String(player.spell1));
 			spell2.gotoAndStop(String(player.spell2));
 			
@@ -38,7 +44,6 @@
 			
 			summonerName.text = player.summonerName;
 			div.text = player.division;
-			playerGs.text = player.gScore+" GS";
 			wins.text = "W: "+player.wins;
 			losses.text = "L: "+player.losses;
 			
@@ -59,6 +64,7 @@
 				TweenMax.to(ev.target,1,{autoAlpha:1});
 				ev.target.visible = true;
 				dispatchEvent(new Event("splashCargado"));
+				getChampTier(apiKey,player,realm);
 			});
 			
 			goLk.addEventListener(MouseEvent.CLICK,function(lk:MouseEvent):void{
@@ -82,8 +88,6 @@
 				});
 				parent.parent.addChild(specAlert);
 			});
-			
-			getChampTier(apiKey,player,realm);
 		}
 		
 		private function getChampTier(apiKey:String,player:Object,realm:String):void{
@@ -100,8 +104,8 @@
 						if(history.matches){
 							var champData = history.matches[0].participants[0].stats;
 							var matchData = history.matches[0].participants[0].timeline;
+							playerGs.text = addScore(player.gScore,champData,matchData)+" GS";
 							cTier.gotoAndStop(calcularTier(champData,matchData));
-							//trace(history.matches[0].participants[0].highestAchievedSeasonTier);
 							finCarga();
 						}else{
 							finCarga();
@@ -136,6 +140,16 @@
 		
 		private function finCarga(){
 			dispatchEvent(new Event("infoCargada"));
+		}
+		
+		private function addScore(score:Number,champData:Object=null,matchData:Object=null):int
+		{
+			var devolucion:int = 0;
+			if(!matchData) return score;
+			if(!matchData.role==="DUO_SUPPORT") devolucion = score + Number(champData.kills - champData.deaths + (champData.assists / 2));
+			else devolucion = score + Number(champData.assists - champData.deaths + (champData.kills / 2));
+			
+			return devolucion;
 		}
 	}
 }
