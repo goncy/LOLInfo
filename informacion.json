@@ -2,11 +2,11 @@
     "lastVersion": 2.7,
     "versionInfo":{
         "lastVersion": 2.7,
-        "changelog": "Cambios en los valores de GS y agregado el nivel del summoner en caso de no ser 30!\n\nMas info <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>click aca!</a>"
+        "changelog": "Cambios en los valores de GS y agregado el nivel del summoner en caso de no ser 30!\n\nMas info <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'><strong>click aca!</strong></a>"
     },
     "informacion": {
         "Titulo": "Hola Invocadores!",
-        "Texto": "Gente!\nYa pueden bajar la version 2.7 de la <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>pagina de facebook!</a>\n\nO de aca: <a href='https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true'>Descarga</a>",
+        "Texto": "Gente!\nYa pueden bajar la version 2.7 de la <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'><strong>pagina de facebook!</strong></a>\n\nO de este link directo: <a href='https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true'><strong>Descarga</strong></a>",
         "id": "Este es mi mundo"
     }
 }
