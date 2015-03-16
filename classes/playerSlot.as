@@ -132,7 +132,7 @@
 				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 15) return 8;
 				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 10) return 4;
 				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 7) return 3;
-				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 5) return 1;
+				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) > 5) return 2;
 				if(Number(champData.assists - champData.deaths + (champData.kills / 2)) < 5) return 1;
 			}
 			return 0;
