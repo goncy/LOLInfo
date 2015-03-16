@@ -9,6 +9,8 @@
 	import flash.events.FocusEvent;
 	import flash.events.ErrorEvent;
 	import flash.desktop.NativeApplication;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	import com.lolinfoapi.LOLInfoApi;
 	import com.lolinfoapi.infoSearch;
 	import classes.playerSlot;
@@ -435,6 +437,9 @@
 			var changelog:String = appInfo.versionInfo.changelog;
 			
 			lolinfoVersion.text = "LOLInfo "+appVer;
+			lolinfoVersion.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){
+				navigateToURL(new URLRequest("https://www.facebook.com/LOLInfoGonzaloPozzo"), "_blank");
+			});
 			
 			if(appInfo.lastVersion>getAppVersion()){
 				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
