@@ -200,8 +200,6 @@
 				};
 				
 				function parseUnrankeds(){
-					trace();
-					
 					var loaderLevels:URLLoader = new URLLoader();
 					var requestLevels:URLRequest = new URLRequest();
 					
@@ -241,7 +239,9 @@
 								trace("Carga match completa");
 								dispatchEvent(new Event("matchCompleta"));
 							});
-						}
+						}else if(e.status===404){
+							dispatchEvent(new Event("tiersError"));
+						}						
 					});
 					
 					loaderLevels.addEventListener(IOErrorEvent.IO_ERROR, function(error:IOErrorEvent){
