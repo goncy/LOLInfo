@@ -108,6 +108,7 @@
 			});
 			
 			userContainer.configIcon.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+				if(userContainer.alpha < 1) return;
 				userContainer.visible = false;
 				configPop.visible = true;
 				if(userInfo.name){
@@ -348,7 +349,13 @@
 		
 		private function configOptions():void
 		{			
-			if(userConfigs.bgName) bgImage.gotoAndStop(userConfigs.bgName);
+			if(userConfigs.bgName){
+				try{
+					bgImage.gotoAndStop(userConfigs.bgName);
+				}catch(e:Error){
+					bgImage.gotoAndStop("jinx");
+				}
+			}
 			else bgImage.gotoAndStop("jinx");
 				
 			if(userConfigs.summonerSearch){
