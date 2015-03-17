@@ -25,7 +25,7 @@
 				division.gotoAndStop(player.tier);
 				tierLogo.gotoAndStop(player.tier);
 			}
-			playerGs.text = addScore(player.gScore)+" GS";
+			playerGs.text = player.gScore+" GS";
 			spell1.gotoAndStop(String(player.spell1));
 			spell2.gotoAndStop(String(player.spell2));
 			
@@ -104,7 +104,8 @@
 						if(history.matches){
 							var champData = history.matches[0].participants[0].stats;
 							var matchData = history.matches[0].participants[0].timeline;
-							playerGs.text = addScore(player.gScore,champData,matchData)+" GS";
+							player.gScore = addScore(player.gScore,player.nivel,champData,matchData);
+							playerGs.text = player.gScore+" GS";
 							cTier.gotoAndStop(calcularTier(champData,matchData));
 							finCarga();
 						}else{
@@ -142,13 +143,15 @@
 			dispatchEvent(new Event("infoCargada"));
 		}
 		
-		private function addScore(score:Number,champData:Object=null,matchData:Object=null):int
+		private function addScore(score:Number,nivel:Number=NaN,champData:Object=null,matchData:Object=null):int
 		{
 			var devolucion:int = 0;
-			if(!matchData) return score;
-			if(!matchData.role==="DUO_SUPPORT") devolucion = score + Number(champData.kills - champData.deaths + (champData.assists / 2));
-			else devolucion = score + Number(champData.assists - champData.deaths + (champData.kills / 2));
 			
+			if(!matchData) return score;
+			if(!matchData.role==="DUO_SUPPORT") devolucion = score + Number(champData.kills - champData.deaths + (champData.assists / 2))*10;
+			else devolucion = score + Number(champData.assists - champData.deaths + (champData.kills / 2))*10;
+			
+			if(nivel) devolucion += 33*nivel;
 			return devolucion;
 		}
 	}

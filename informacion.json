@@ -1,12 +1,12 @@
 {
-    "lastVersion": 2.7,
+    "lastVersion": 2.8,
     "versionInfo":{
-        "lastVersion": 2.7,
-        "changelog": "Cambios en los valores de GS y agregado el nivel del summoner en caso de no ser 30!\n\nMas info <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>https://www.facebook.com/LOLInfoGonzaloPozzo</a>"
+        "lastVersion": 2.8,
+        "changelog": "Cambios en los valores de GS y agregado el nivel del summoner en caso de no ser 30 y nuevo fondo de Xin!\n\nMas info <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>https://www.facebook.com/LOLInfoGonzaloPozzo</a>"
     },
     "informacion": {
         "Titulo": "Hola Invocadores!",
-        "Texto": "Gente!, ya pueden bajar la version 2.7 de la <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>pagina de facebook: <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>https://www.facebook.com/LOLInfoGonzaloPozzo</a>\n\nO de este link directo: <a href='https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true'>Descarga</a>",
+        "Texto": "Gente!, ya pueden bajar la version 2.8 de la <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>pagina de facebook: <a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>https://www.facebook.com/LOLInfoGonzaloPozzo</a>\n\nO de este link directo: <a href='https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true'>Descarga</a>",
         "id": "Este es mi mundo"
     }
 }

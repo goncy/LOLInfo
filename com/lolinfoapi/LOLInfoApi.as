@@ -223,7 +223,7 @@
 									players[indexPlayer].lp = 0;
 									players[indexPlayer].wins = 0;
 									players[indexPlayer].losses = 0;
-									players[indexPlayer].gScore = 10;
+									players[indexPlayer].gScore = 30+33*players[indexPlayer].nivel;
 									if(players[indexPlayer].teamId===100){
 										teamA.players.push(players[indexPlayer]);
 										teamA.score += players[indexPlayer].gScore;
@@ -269,45 +269,45 @@
 		private function getScore(player:Object):int
 		{
 			var score:Number;
-			var baseScore:Number = 10;
+			var maxLvlBase:Number = 990;
+			var baseScore:Number = 30;
+			var divisionScore:Number = 600;
 			var matchesDif:Number = Number(player.wins) - Number(player.losses);
 			score = baseScore;
+			
+			score += getDiv(player.division)*150;
+			score += matchesDif * 5;
+			score += player.lp;
+			score += maxLvlBase;
 						
 			switch(player.tier){
 				case "BRONZE":
 					score += baseScore*1;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*1;
 				break;
 				case "SILVER":
 					score += baseScore*2;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*2;
 				break;
 				case "GOLD":
 					score += baseScore*3;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*3;
 				break;
 				case "PLATINUM":
 					score += baseScore*4;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*4;
 				break;
 				case "DIAMOND":
 					score += baseScore*5;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*5;
 				break;
 				case "MASTER":
 					score += baseScore*6;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*6;
 				break;
 				case "CHALLENGER":
 					score += baseScore*7;
-					score += 10-getDiv(player.division)*2;
-					score += matchesDif * 0.2;
+					score += divisionScore*7;
 				break;
 			}
 			return score;
@@ -319,19 +319,19 @@
 			
 			switch(division){
 				case "V":
-					devolucion = 5;
+					devolucion = 1;
 				break;
 				case "IV":
-					devolucion = 4;
+					devolucion = 2;
 				break;
 				case "III":
 					devolucion = 3;
 				break;
 				case "II":
-					devolucion = 2;
+					devolucion = 4;
 				break;
 				case "I":
-					devolucion = 1;
+					devolucion = 5;
 				break;
 			}
 			

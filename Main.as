@@ -223,7 +223,6 @@
 			lolApiRequest.getTrace();
 			generateTeamA();
 			generateTeamB();
-			generateMatchInfo();
 		}
 		
 		private function generateTeamA():void
@@ -278,6 +277,7 @@
 		
 		private function addToStage():void
 		{
+			generateMatchInfo();
 			matchContainer.y = 97;
 			animateAlpha(matchContainer,1,0,1,0,53);
 			
@@ -436,10 +436,7 @@
 			var lastVer:Number = appInfo.versionInfo.lastVersion;
 			var changelog:String = appInfo.versionInfo.changelog;
 			
-			lolinfoVersion.text = "LOLInfo "+appVer;
-			lolinfoVersion.addEventListener(MouseEvent.CLICK, function(e:MouseEvent){
-				navigateToURL(new URLRequest("https://www.facebook.com/LOLInfoGonzaloPozzo"), "_blank");
-			});
+			lolinfoVersion.htmlText = "<a href='https://www.facebook.com/LOLInfoGonzaloPozzo'>LOLInfo "+appVer+"</a>";
 			
 			if(appInfo.lastVersion>getAppVersion()){
 				var descarga:String = "https://github.com/goncy/LOLInfo/blob/master/LOLInfo.zip?raw=true";
