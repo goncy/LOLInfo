@@ -261,7 +261,7 @@
 			
 			if(playersLoaded === lolApiRequest.matchInfo.participants.length){
 				slot.addEventListener("infoCargada", function(e:Event):void{
-					TweenMax.delayedCall(1,addToStage);
+					TweenMax.delayedCall(2,addToStage);
 				});
 			}
 		}

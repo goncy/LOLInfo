@@ -11,9 +11,9 @@
 			if(partida.matchInfo.queueType) map.text = partida.matchInfo.mapName.toUpperCase() + " ("+partida.matchInfo.queueType+")";
 			else map.text = partida.matchInfo.mapName.toUpperCase();
 			
-			var totalScore:int = partida.teamA.score + partida.teamB.score;
-			var teamAscore:int = Math.round((partida.teamA.score * 100) / totalScore);
-			var teamBscore:int = Math.round((partida.teamB.score * 100) / totalScore);
+			var totalScore:int = Math.round(getScore(partida,"a") + getScore(partida,"b"));
+			var teamAscore:int = Math.round((getScore(partida,"a") * 100) / totalScore);
+			var teamBscore:int = Math.round((getScore(partida,"b") * 100) / totalScore);
 			
 			ascore.text = teamAscore+"%";
 			bscore.text = teamBscore+"%";
@@ -35,6 +35,23 @@
 				itirator++;
 				addChild(banteamB);
 			}
+		}
+		
+		private function getScore(partida,team):int{
+			var devolucion:int = 0;
+			switch(team){
+				case "a":
+					for each(var jugadorA in partida.teamA.players){
+						devolucion += jugadorA.gScore;
+					}
+				break;
+				case "b":
+					for each(var jugadorB in partida.teamB.players){
+						devolucion += jugadorB.gScore;
+					}
+				break;
+			}
+			return devolucion;
 		}
 	}
 	
